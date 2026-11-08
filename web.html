@@ -7,10 +7,9 @@
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
   
-  /* --- ПЕРЕМЕННЫЕ ДЛЯ ТЕМ --- */
   :root {
-    --orange: #f59e0b; --red: #ef4444;
-    --bg: #050814; --panel: rgba(15, 23, 42, 0.85); --panel-light: rgba(30, 41, 59, 0.9);
+    --orange: #f59e0b; --red: #ef4444; --bg: #050814;
+    --panel: rgba(15, 23, 42, 0.85); --panel-light: rgba(30, 41, 59, 0.9);
     --text: #ffffff; --text-muted: #94a3b8;
     --msg-in: rgba(30, 41, 59, 0.95); --msg-out: linear-gradient(135deg, var(--orange), var(--red));
     --border: rgba(255,255,255,0.08); --input-bg: rgba(0,0,0,0.2);
@@ -34,7 +33,7 @@
   
   #wave-canvas { position: fixed; bottom: 0; left: 0; width: 100%; height: 100vh; z-index: 1; pointer-events: none; opacity: 0.4; }
 
-  /* --- АВТОРИЗАЦИЯ --- */
+  /* Авторизация */
   .auth-screen { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(5, 8, 20, 0.9); backdrop-filter: blur(10px); z-index: 50; transition: 0.4s; }
   .auth-box { background: var(--panel); border: 1px solid var(--border); border-radius: 24px; padding: 40px; width: 400px; max-width: 95%; box-shadow: 0 20px 50px rgba(0,0,0,0.5); transition: 0.4s; animation: fadeIn 0.5s ease; }
   @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
@@ -49,11 +48,10 @@
   .google-btn { width: 100%; padding: 14px; background: #fff; color: #000; border: none; border-radius: 12px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 10px; transition: 0.3s; }
   .google-btn:hover { background: #f1f5f9; transform: translateY(-2px); }
 
-  /* --- ПРИЛОЖЕНИЕ --- */
+  /* Приложение */
   .app { display: none; width: 100%; height: 100%; z-index: 10; }
   .app.active { display: flex; }
 
-  /* Левая панель */
   .sidebar { width: 340px; background: var(--panel); backdrop-filter: blur(20px); border-right: 1px solid var(--border); display: flex; flex-direction: column; transition: 0.4s; animation: slideRight 0.4s ease; }
   @keyframes slideRight { from { transform: translateX(-100%); } to { transform: translateX(0); } }
   
@@ -63,7 +61,6 @@
   .avatar { width: 42px; height: 42px; border-radius: 50%; background: var(--panel-light); display: flex; align-items: center; justify-content: center; font-weight: bold; overflow: hidden; flex-shrink: 0; cursor: pointer; border: 1px solid var(--border); transition: 0.3s; }
   .avatar:hover { transform: scale(1.05); }
   .avatar img { width: 100%; height: 100%; object-fit: cover; }
-  
   .theme-btn { background: transparent; border: none; font-size: 20px; cursor: pointer; margin-right: 10px; transition: 0.3s; }
   .theme-btn:hover { transform: rotate(30deg) scale(1.1); }
 
@@ -72,7 +69,7 @@
   .search-input:focus { border-color: var(--orange); }
   .create-btn { width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, var(--orange), var(--red)); border: none; color: #fff; font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: 0.3s; }
   .create-btn:hover { transform: rotate(90deg) scale(1.1); }
-  
+
   .chat-list { flex: 1; overflow-y: auto; padding: 0 12px 12px; }
   .chat-item { display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 14px; cursor: pointer; transition: 0.3s; margin-bottom: 4px; animation: fadeIn 0.3s ease; }
   .chat-item:hover { background: rgba(255,255,255,0.05); transform: translateX(5px); }
@@ -82,7 +79,6 @@
   .chat-name { font-weight: 600; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .chat-last { font-size: 13px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 2px; }
 
-  /* Центр */
   .main { flex: 1; display: flex; flex-direction: column; background: transparent; position: relative; }
   .chat-header { padding: 16px 24px; background: var(--panel); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; transition: 0.4s; }
   .chat-header-info { display: flex; align-items: center; gap: 12px; cursor: pointer; }
@@ -111,8 +107,7 @@
   .input-field { flex: 1; background: transparent; border: none; color: var(--text); resize: none; outline: none; padding: 10px; font-size: 15px; max-height: 100px; }
   .send-btn { background: linear-gradient(135deg, var(--orange), var(--red)); border: none; color: #fff; width: 44px; height: 44px; border-radius: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 18px; transition: 0.3s; }
   .send-btn:hover { transform: scale(1.1) rotate(-15deg); box-shadow: 0 0 20px rgba(245, 158, 11, 0.5); }
-  
-  /* Модалки */
+
   .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.6); display: none; align-items: center; justify-content: center; z-index: 1000; backdrop-filter: blur(5px); }
   .modal.active { display: flex; }
   .modal-box { background: var(--panel); padding: 30px; border-radius: 24px; width: 400px; border: 1px solid var(--border); text-align: center; animation: zoomIn 0.3s ease; transition: 0.4s; }
@@ -122,8 +117,7 @@
   .modal-avatar:hover { transform: scale(1.05); border-color: var(--orange); }
   .modal-avatar:hover::after { content: '📷'; position: absolute; inset: 0; background: rgba(0,0,0,0.5); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
   .modal-input { width: 100%; padding: 12px; background: var(--input-bg); border: 1px solid var(--border); border-radius: 12px; color: var(--text); margin-bottom: 12px; outline: none; text-align: left; }
-  
-  /* Звонок */
+
   .call-screen { position: fixed; inset: 0; background: var(--bg); z-index: 2000; display: none; flex-direction: column; align-items: center; justify-content: center; backdrop-filter: blur(20px); }
   .call-screen.active { display: flex; }
   .call-avatar { width: 130px; height: 130px; border-radius: 50%; background: linear-gradient(135deg, var(--orange), var(--red)); display: flex; align-items: center; justify-content: center; font-size: 50px; margin-bottom: 20px; animation: pulse 2s infinite; }
@@ -146,7 +140,6 @@
 <div class="stars"></div>
 <canvas id="wave-canvas"></canvas>
 
-<!-- АВТОРИЗАЦИЯ -->
 <div class="auth-screen" id="authScreen">
   <div class="auth-box">
     <h2 style="text-align:center; margin-bottom:20px;">Комета ☄️</h2>
@@ -176,7 +169,6 @@
   </div>
 </div>
 
-<!-- ПРИЛОЖЕНИЕ -->
 <div class="app" id="app">
   <aside class="sidebar" id="sidebar">
     <div class="header">
@@ -221,7 +213,6 @@
   </main>
 </div>
 
-<!-- МОДАЛКА: ПРОФИЛЬ -->
 <div class="modal" id="profileModal">
   <div class="modal-box">
     <h2>Мой профиль</h2>
@@ -241,7 +232,6 @@
   </div>
 </div>
 
-<!-- МОДАЛКА: СОЗДАНИЕ -->
 <div class="modal" id="createModal">
   <div class="modal-box">
     <h2>Создать</h2>
@@ -255,7 +245,6 @@
   </div>
 </div>
 
-<!-- МОДАЛКА: НАСТРОЙКИ -->
 <div class="modal" id="settingsModal">
   <div class="modal-box">
     <h2>Настройки</h2>
@@ -264,7 +253,6 @@
   </div>
 </div>
 
-<!-- ЗВОНОК -->
 <div class="call-screen" id="callScreen">
   <div class="call-avatar" id="callAvatar">А</div>
   <div class="call-name" id="callName">Собеседник</div>
@@ -303,7 +291,6 @@
   let callTimer;
   let currentMsgListener = null;
 
-  // --- ТЕМА ---
   window.toggleTheme = () => {
     const body = document.body;
     const isLight = body.getAttribute('data-theme') === 'light';
@@ -317,13 +304,11 @@
       localStorage.setItem('theme', 'light');
     }
   };
-  // Восстановление темы
   if(localStorage.getItem('theme') === 'light') {
     document.body.setAttribute('data-theme', 'light');
     $('themeBtn').textContent = '🌙';
   }
 
-  // АВТОРИЗАЦИЯ
   window.switchAuth = (type) => {
     $('tabLogin').classList.toggle('active', type === 'login');
     $('tabReg').classList.toggle('active', type === 'reg');
@@ -346,6 +331,7 @@
   onAuthStateChanged(auth, async (user) => {
     if (user) {
       currentUser = user;
+      
       const userStatusRef = ref(db, '/users/' + user.uid);
       onDisconnect(userStatusRef).update({ online: false, last_changed: serverTimestamp() }).then(() => {
         userStatusRef.update({ online: true, last_changed: serverTimestamp() });
@@ -359,6 +345,7 @@
         set(ref(db, 'users/' + user.uid), myProfile);
       }
       updateProfileUI();
+
       $('authScreen').style.display = 'none';
       $('app').classList.add('active');
       
@@ -372,7 +359,6 @@
     }
   });
 
-  // ПРОФИЛЬ
   function updateProfileUI() {
     const avHTML = myProfile.avatar ? `<img src="${myProfile.avatar}">` : myProfile.nickname[0].toUpperCase();
     $('myAvatar').innerHTML = avHTML;
@@ -409,28 +395,31 @@
     closeModal('profileModal');
   };
 
-  // СОЗДАНИЕ ЧАТОВ
   window.openCreate = () => $('createModal').classList.add('active');
   window.createChat = async () => {
     const name = $('createName').value; const type = $('createType').value;
     if(!name) return alert("Введите название!");
+    
     const newChatRef = push(ref(db, 'chats'));
     const chatId = newChatRef.key;
-    await set(newChatRef, { name: name, type: type, owner: currentUser.uid, members: { [currentUser.uid]: true } });
+    
+    await set(newChatRef, {
+      name: name, type: type, owner: currentUser.uid,
+      members: { [currentUser.uid]: true }
+    });
     await set(ref(db, `user_chats/${currentUser.uid}/${chatId}`), true);
+    
     closeModal('createModal');
     $('createName').value = '';
     openChat(chatId);
   };
 
-  // СПИСОК ЧАТОВ (ИСПРАВЛЕННЫЙ ПОИСК)
   function renderSidebar() {
     const q = $('searchInput').value.toLowerCase().trim();
     $('chatList').innerHTML = '';
     let found = 0;
 
     if(q === '') {
-      // Показываем только мои сохраненные чаты
       for (const id in myChats) {
         const meta = allChatsMeta[id];
         if(meta) {
@@ -446,8 +435,6 @@
         }
       }
     } else {
-      // ПОИСК: Ищем по всем юзерам и глобальным группам
-      // 1. Люди (по имени или телефону)
       for (const uid in allUsers) {
         if(uid === currentUser.uid) continue;
         const u = allUsers[uid];
@@ -460,7 +447,6 @@
           found++;
         }
       }
-      // 2. Группы и каналы
       for (const id in allChatsMeta) {
         const c = allChatsMeta[id];
         if(c.name.toLowerCase().includes(q)) {
@@ -497,7 +483,6 @@
 
   $('searchInput').addEventListener('input', renderSidebar);
 
-  // ОТКРЫТИЕ ЧАТА
   window.openChat = (id) => {
     let name = '', type = 'private', owner = '';
     if(allChatsMeta[id]) { name = allChatsMeta[id].name; type = allChatsMeta[id].type; owner = allChatsMeta[id].owner; }
@@ -524,7 +509,6 @@
 
   window.toggleSidebar = () => $('sidebar').classList.toggle('active');
 
-  // СООБЩЕНИЯ
   function renderMessage(msg) {
     const isMine = msg.uid === currentUser.uid;
     const div = document.createElement('div');
@@ -559,7 +543,6 @@
     $('msgInput').value = '';
   };
 
-  // ЗВОНКИ
   window.startCall = () => {
     if(!currentChat) return;
     $('callName').textContent = currentChat.name;
@@ -583,7 +566,6 @@
 
   window.openSettings = () => $('settingsModal').classList.add('active');
 
-  // ВОЛНЫ
   const canvas = document.getElementById('wave-canvas');
   const ctx = canvas.getContext('2d');
   let width, height, time = 0;
@@ -610,4 +592,3 @@
 </script>
 </body>
 </html>
-
