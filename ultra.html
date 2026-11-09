@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UltraApp PRO</title>
+
+  <style>
+    /* ===== БАЗА ===== */
+    :root {
+      --bg: #0b0d14;
+      --card-bg: rgba(255, 255, 255, 0.06);
+      --card-border: rgba(255, 255, 255, 0.12);
+      --accent-grad: linear-gradient(135deg, #6366f1, #a855f7, #ec4899);
+      --text: #ffffff;
+      --text-sub: #94a3b8;
+      --danger: #fb7185;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* ===== ФОНОВЫЕ СФЕРЫ ===== */
+    .bg-sphere {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(90px);
+      z-index: 0;
+      animation: float 12s infinite ease-in-out alternate;
+    }
+    .sphere-1 { width: 350px; height: 350px; background: #6366f1; top: -80px; left: -80px; }
+    .sphere-2 { width: 300px; height: 300px; background: #ec4899; bottom: -60px; right: -60px; animation-delay: -6s; }
+    .sphere-3 {
+      width: 200px; height: 200px; background: #8b5cf6;
+      top: 40%; left: 50%; transform: translate(-50%, -50%);
+      animation: pulse 8s infinite alternate;
+    }
+
+    @keyframes float {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(50px, 60px) scale(1.18); }
+    }
+    @keyframes pulse {
+      0% { opacity: 0.3; transform: translate(-50%, -50%) scale(0.8); }
+      100% { opacity: 0.7; transform: translate(-50%, -50%) scale(1.2); }
+    }
+
+    /* ===== КОНТЕЙНЕР ===== */
+    .app-container {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 430px;
+      height: 92vh;
+      background: var(--card-bg);
+      backdrop-filter: blur(30px);
+      -webkit-backdrop-filter: blur(30px);
+      border: 1px solid var(--card-border);
+      border-radius: 32px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.2);
+    }
+
+    /* ===== ШАПКА ===== */
+    .header {
+      position: relative;
+      padding: 20px 22px;
+      text-align: center;
+      border-bottom: 1px solid var(--card-border);
+      background: rgba(0, 0, 0, 0.2);
+    }
+    .header h1 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      background: var(--accent-grad);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .btn-logout {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--card-border);
+      color: var(--text-sub);
+      cursor: pointer;
+      font-size: 1.05rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s;
+    }
+    .btn-logout:hover {
+      color: var(--danger);
+      border-color: rgba(251, 113, 133, 0.5);
+      background: rgba(251, 113, 133, 0.1);
+    }
+
+    /* ===== КОНТЕНТ ===== */
+    .content {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+      position: relative;
+    }
+
+    /* ===== ЭКРАН АВТОРИЗАЦИИ ===== */
+    .auth-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100%;
+      gap: 20px;
+      text-align: center;
+      animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .auth-head {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 4px;
+    }
+    .auth-head p {
+      color: var(--text-sub);
+      font-size: 0.9rem;
+      line-height: 1.5;
+      max-width: 300px;
+    }
+    .logo-mark {
+      width: 64px;
+      height: 64px;
+      border-radius: 20px;
+      background: var(--accent-grad);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: #fff;
+      box-shadow: 0 10px 30px rgba(168, 85, 247, 0.45);
+    }
+
+    /* Табы */
+    .tabs {
+      display: flex;
+      gap: 6px;
+      width: 100%;
+      padding: 6px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--card-border);
+      border-radius: 18px;
+    }
+    .tab {
+      flex: 1;
+      padding: 12px;
+      border: none;
+      border-radius: 13px;
+      background: transparent;
+      color: var(--text-sub);
+      font-weight: 700;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .tab.active {
+      background: var(--accent-grad);
+      color: #fff;
+      box-shadow: 0 6px 18px rgba(168, 85, 247, 0.4);
+    }
+    .tab:not(.active):hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    /* Формы */
+    .auth-form {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      width: 100%;
+      animation: fadeIn 0.4s ease;
+    }
+    .field { width: 100%; }
+    .field input {
+      width: 100%;
+      padding: 16px 18px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      color: #fff;
+      font-size: 0.98rem;
+      outline: none;
+      transition: border-color 0.3s, box-shadow 0.3s, background 0.3s;
+    }
+    .field input::placeholder { color: #64748b; }
+    .field input:focus {
+      border-color: rgba(168, 85, 247, 0.6);
+      box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.15);
+      background: rgba(255, 255, 255, 0.07);
+    }
+
+    .btn-primary {
+      width: 100%;
+      padding: 16px;
+      border: none;
+      border-radius: 16px;
+      background: var(--accent-grad);
+      color: #fff;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .btn-primary:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(168, 85, 247, 0.4);
+    }
+    .btn-primary:active:not(:disabled) { transform: scale(0.97); }
+    .btn-primary:disabled { opacity: 0.6; cursor: wait; }
+
+    .error-msg {
+      color: var(--danger);
+      font-size: 0.85rem;
+      min-height: 20px;
+      text-align: center;
+      line-height: 1.4;
+    }
+
+    /* ===== ПРОФИЛЬ ===== */
+    .profile-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .avatar-wrapper {
+      position: relative;
+      padding: 4px;
+      background: var(--accent-grad);
+      border-radius: 50%;
+      animation: pulseGlow 3s infinite alternate;
+    }
+    .avatar {
+      width: 96px;
+      height: 96px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.4rem;
+      font-weight: 800;
+      color: #a855f7;
+      background: linear-gradient(135deg, #1e293b, #0f172a);
+      text-transform: uppercase;
+    }
+    @keyframes pulseGlow {
+      0% { box-shadow: 0 0 20px rgba(99, 102, 241, 0.4); }
+      100% { box-shadow: 0 0 40px rgba(236, 72, 153, 0.8); }
+    }
+
+    /* Поле публикации */
+    .post-box {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      transition: border-color 0.3s;
+    }
+    .post-box:focus-within { border-color: rgba(168, 85, 247, 0.5); }
+    textarea {
+      width: 100%;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: #fff;
+      resize: none;
+      font-size: 0.95rem;
+      line-height: 1.4;
+      max-height: 140px;
+    }
+    textarea::placeholder { color: #64748b; }
+    .btn-post {
+      align-self: flex-end;
+      background: var(--accent-grad);
+      color: #fff;
+      border: none;
+      padding: 10px 22px;
+      border-radius: 14px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .btn-post:hover:not(:disabled) {
+      transform: scale(1.05);
+      box-shadow: 0 5px 20px rgba(168, 85, 247, 0.4);
+    }
+    .btn-post:disabled { opacity: 0.6; cursor: wait; }
+
+    /* Лента */
+    .feed-status {
+      width: 100%;
+      color: var(--text-sub);
+      font-size: 0.85rem;
+      text-align: center;
+      min-height: 18px;
+    }
+    .feed {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .post-card {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--card-border);
+      border-radius: 18px;
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      animation: slideUp 0.4s ease-out;
+    }
+    .post-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .post-avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: var(--accent-grad);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.9rem;
+      flex-shrink: 0;
+      text-transform: uppercase;
+    }
+    .post-author {
+      font-weight: 700;
+      font-size: 0.9rem;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      max-width: 150px;
+    }
+    .post-meta {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      flex-shrink: 0;
+    }
+    .post-time { font-size: 0.72rem; color: var(--text-sub); }
+    .post-del {
+      background: transparent;
+      border: none;
+      color: #64748b;
+      cursor: pointer;
+      font-size: 0.95rem;
+      padding: 4px 7px;
+      border-radius: 8px;
+      transition: all 0.2s;
+    }
+    .post-del:hover {
+      color: var(--danger);
+      background: rgba(251, 113, 133, 0.1);
+    }
+    .post-text {
+      font-size: 0.95rem;
+      line-height: 1.45;
+      color: #fff;
+      word-break: break-word;
+      white-space: pre-wrap;
+    }
+
+    /* ===== НИЖНЯЯ НАВИГАЦИЯ ===== */
+    .nav-bar {
+      display: flex;
+      justify-content: space-around;
+      padding: 16px;
+      border-top: 1px solid var(--card-border);
+      background: rgba(0, 0, 0, 0.3);
+    }
+    .nav-item {
+      color: var(--text-sub);
+      font-size: 1.3rem;
+      cursor: pointer;
+      transition: all 0.3s;
+      padding: 6px 16px;
+      border-radius: 12px;
+    }
+    .nav-item.active {
+      color: #a855f7;
+      background: rgba(168, 85, 247, 0.15);
+      transform: translateY(-2px);
+    }
+
+    /* ===== АНИМАЦИИ ===== */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.96); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+
+  <!-- Фон -->
+  <div class="bg-sphere sphere-1"></div>
+  <div class="bg-sphere sphere-2"></div>
+  <div class="bg-sphere sphere-3"></div>
+
+  <!-- Приложение -->
+  <div class="app-container">
+
+    <div class="header">
+      <h1>UltraApp PRO</h1>
+      <button id="logout-btn" class="btn-logout hidden" title="Выйти" type="button">⏻</button>
+    </div>
+
+    <div class="content">
+
+      <!-- Экран авторизации -->
+      <div id="auth-screen" class="auth-card">
+        <div class="auth-head">
+          <div class="logo-mark">U</div>
+          <p>Войдите или создайте аккаунт по нику и паролю — это займёт пару секунд</p>
+        </div>
+
+        <div class="tabs">
+          <button class="tab active" data-tab="login" type="button">Вход</button>
+          <button class="tab" data-tab="register" type="button">Регистрация</button>
+        </div>
+
+        <!-- Вход -->
+        <form id="login-form" class="auth-form" novalidate>
+          <div class="field">
+            <input name="nick" type="text" placeholder="Ник (3–20 символов)" autocomplete="username" maxlength="20">
+          </div>
+          <div class="field">
+            <input name="pass" type="password" placeholder="Пароль" autocomplete="current-password">
+          </div>
+          <button type="submit" class="btn-primary">Войти</button>
+        </form>
+
+        <!-- Регистрация -->
+        <form id="register-form" class="auth-form hidden" novalidate>
+          <div class="field">
+            <input name="nick" type="text" placeholder="Ник (3–20 символов)" autocomplete="username" maxlength="20">
+          </div>
+          <div class="field">
+            <input name="pass" type="password" placeholder="Пароль (минимум 6 символов)" autocomplete="new-password">
+          </div>
+          <div class="field">
+            <input name="pass2" type="password" placeholder="Повторите пароль" autocomplete="new-password">
+          </div>
+          <button type="submit" class="btn-primary">Создать аккаунт</button>
+        </form>
+
+        <div id="auth-error" class="error-msg"></div>
+      </div>
+
+      <!-- Экран профиля -->
+      <div id="profile-screen" class="profile-card hidden">
+        <div class="avatar-wrapper">
+          <div id="user-avatar" class="avatar">?</div>
+        </div>
+        <h2 id="user-nick" style="font-size: 1.2rem; font-weight: 700;">@user</h2>
+
+        <!-- Создание поста -->
+        <div class="post-box">
+          <textarea id="post-input" rows="3" maxlength="1000" placeholder="Что у вас нового? Поделитесь с миром..."></textarea>
+          <button id="post-btn" class="btn-post" type="button">Опубликовать</button>
+        </div>
+
+        <div id="feed-status" class="feed-status"></div>
+        <div id="posts-feed" class="feed"></div>
+      </div>
+
+    </div>
+
+    <!-- Навигация -->
+    <div class="nav-bar">
+      <div class="nav-item active">🏠</div>
+      <div class="nav-item">🔥</div>
+      <div class="nav-item">👤</div>
+    </div>
+
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-analytics.js";
+    import {
+      getAuth,
+      createUserWithEmailAndPassword,
+      signInWithEmailAndPassword,
+      signOut,
+      onAuthStateChanged,
+      updateProfile
+    } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-auth.js";
+    import {
+      getFirestore,
+      collection,
+      query,
+      orderBy,
+      onSnapshot,
+      addDoc,
+      deleteDoc,
+      doc,
+      serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-firestore.js";
+
+    /* ===== КОНФИГ ===== */
+    const firebaseConfig = {
+      apiKey: "AIzaSyCWy6OH5ZBfrXkJImajTzSaJCbr3hegUy4",
+      authDomain: "ultraapprp.firebaseapp.com",
+      projectId: "ultraapprp",
+      storageBucket: "ultraapprp.firebasestorage.app",
+      messagingSenderId: "636236347207",
+      appId: "1:636236347207:web:ac730a28346d60d5087e62",
+      measurementId: "G-LZBG1PBKX5"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    try { getAnalytics(app); } catch (e) { console.warn("Analytics недоступна:", e); }
+
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    /* ===== ХЕЛПЕРЫ ===== */
+    const NICK_RE = /^[a-zA-Z0-9_]{3,20}$/;
+    const nickToEmail = (nick) => nick.toLowerCase() + "@ultraapp.app";
+
+    const $ = (id) => document.getElementById(id);
+
+    const authScreen = $("auth-screen");
+    const profileScreen = $("profile-screen");
+    const loginForm = $("login-form");
+    const registerForm = $("register-form");
+    const authError = $("auth-error");
+    const logoutBtn = $("logout-btn");
+    const userNick = $("user-nick");
+    const userAvatar = $("user-avatar");
+    const postInput = $("post-input");
+    const postBtn = $("post-btn");
+    const feedEl = $("posts-feed");
+    const feedStatus = $("feed-status");
+
+    let unsubFeed = null;
+
+    function setError(text) {
+      authError.textContent = text || "";
+    }
+
+    function setLoading(btn, isLoading, loadingText) {
+      if (isLoading) {
+        btn.dataset.label = btn.textContent;
+        btn.textContent = loadingText || "Подождите…";
+        btn.disabled = true;
+      } else {
+        if (btn.dataset.label) btn.textContent = btn.dataset.label;
+        btn.disabled = false;
+      }
+    }
+
+    function authErrorText(err) {
+      const code = (err && err.code) || "";
+      switch (code) {
+        case "auth/email-already-in-use":
+          return "Этот ник уже занят";
+        case "auth/invalid-credential":
+        case "auth/invalid-login-credentials":
+        case "auth/wrong-password":
+        case "auth/user-not-found":
+        case "auth/invalid-email":
+          return "Неверный ник или пароль";
+        case "auth/weak-password":
+          return "Слишком простой пароль (минимум 6 символов)";
+        case "auth/too-many-requests":
+          return "Слишком много попыток. Попробуйте позже";
+        case "auth/network-request-failed":
+          return "Нет соединения с сервером";
+        default:
+          return "Ошибка: " + ((err && err.message) || "неизвестно");
+      }
+    }
+
+    function formatTime(ts) {
+      if (!ts) return "Только что";
+      const date = typeof ts.toDate === "function" ? ts.toDate() : new Date(ts);
+      const diff = (Date.now() - date.getTime()) / 1000;
+      if (diff < 60) return "Только что";
+      if (diff < 3600) return Math.floor(diff / 60) + " мин назад";
+      if (diff < 86400) return Math.floor(diff / 3600) + " ч назад";
+      return date.toLocaleDateString("ru-RU", { day: "numeric", month: "short" });
+    }
+
+    function currentNick() {
+      const u = auth.currentUser;
+      if (!u) return "";
+      return u.displayName || (u.email || "").split("@")[0];
+    }
+
+    /* ===== ТАБЫ ===== */
+    const tabs = document.querySelectorAll(".tab");
+    tabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        tabs.forEach((t) => t.classList.toggle("active", t === tab));
+        const isLogin = tab.dataset.tab === "login";
+        loginForm.classList.toggle("hidden", !isLogin);
+        registerForm.classList.toggle("hidden", isLogin);
+        setError("");
+      });
+    });
+
+    /* ===== ВХОД ===== */
+    loginForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      setError("");
+
+      const nick = loginForm.elements.nick.value.trim();
+      const pass = loginForm.elements.pass.value;
+
+      if (!NICK_RE.test(nick)) {
+        setError("Ник: 3–20 символов, только латиница, цифры и _");
+        return;
+      }
+      if (pass.length < 6) {
+        setError("Пароль должен быть не менее 6 символов");
+        return;
+      }
+
+      const btn = loginForm.querySelector('button[type="submit"]');
+      setLoading(btn, true, "Вход…");
+      try {
+        await signInWithEmailAndPassword(auth, nickToEmail(nick), pass);
+      } catch (err) {
+        setError(authErrorText(err));
+      } finally {
+        setLoading(btn, false);
+      }
+    });
+
+    /* ===== РЕГИСТРАЦИЯ ===== */
+    registerForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      setError("");
+
+      const nick = registerForm.elements.nick.value.trim();
+      const pass = registerForm.elements.pass.value;
+      const pass2 = registerForm.elements.pass2.value;
+
+      if (!NICK_RE.test(nick)) {
+        setError("Ник: 3–20 символов, только латиница, цифры и _");
+        return;
+      }
+      if (pass.length < 6) {
+        setError("Пароль должен быть не менее 6 символов");
+        return;
+      }
+      if (pass !== pass2) {
+        setError("Пароли не совпадают");
+        return;
+      }
+
+      const btn = registerForm.querySelector('button[type="submit"]');
+      setLoading(btn, true, "Создание…");
+      try {
+        const cred = await createUserWithEmailAndPassword(auth, nickToEmail(nick), pass);
+        try {
+          await updateProfile(cred.user, { displayName: nick });
+        } catch (e) {
+          console.warn("Не удалось сохранить ник:", e);
+        }
+        registerForm.reset();
+      } catch (err) {
+        setError(authErrorText(err));
+      } finally {
+        setLoading(btn, false);
+      }
+    });
+
+    /* ===== ВЫХОД ===== */
+    logoutBtn.addEventListener("click", () => {
+      signOut(auth).catch((e) => console.error(e));
+    });
+
+    /* ===== ПУБЛИКАЦИЯ ===== */
+    postBtn.addEventListener("click", async () => {
+      const text = postInput.value.trim();
+      if (!text || !auth.currentUser) return;
+
+      setLoading(postBtn, true, "Публикация…");
+      try {
+        await addDoc(collection(db, "posts"), {
+          text: text.slice(0, 1000),
+          authorId: auth.currentUser.uid,
+          authorName: currentNick(),
+          createdAt: serverTimestamp()
+        });
+        postInput.value = "";
+      } catch (err) {
+        console.error(err);
+        alert("Не удалось опубликовать: " + ((err && err.message) || err));
+      } finally {
+        setLoading(postBtn, false);
+      }
+    });
+
+    /* ===== РЕНДЕР ПОСТА ===== */
+    function renderPost(id, data) {
+      const card = document.createElement("div");
+      card.className = "post-card";
+
+      const head = document.createElement("div");
+      head.className = "post-head";
+
+      const av = document.createElement("div");
+      av.className = "post-avatar";
+      av.textContent = (data.authorName || "?").charAt(0);
+
+      const name = document.createElement("div");
+      name.className = "post-author";
+      name.textContent = "@" + (data.authorName || "user");
+
+      const meta = document.createElement("div");
+      meta.className = "post-meta";
+
+      const time = document.createElement("div");
+      time.className = "post-time";
+      time.textContent = formatTime(data.createdAt);
+      meta.appendChild(time);
+
+      const uid = auth.currentUser ? auth.currentUser.uid : null;
+      if (uid && data.authorId === uid) {
+        const del = document.createElement("button");
+        del.className = "post-del";
+        del.type = "button";
+        del.title = "Удалить";
+        del.textContent = "✕";
+        del.addEventListener("click", async () => {
+          del.disabled = true;
+          try {
+            await deleteDoc(doc(db, "posts", id));
+          } catch (err) {
+            console.error(err);
+            del.disabled = false;
+          }
+        });
+        meta.appendChild(del);
+      }
+
+      head.append(av, name, meta);
+
+      const text = document.createElement("p");
+      text.className = "post-text";
+      text.textContent = data.text || "";
+
+      card.append(head, text);
+      return card;
+    }
+
+    /* ===== ЛЕНТА ===== */
+    function loadFeed() {
+      feedStatus.textContent = "Загрузка ленты…";
+      feedEl.innerHTML = "";
+
+      const q = query(collection(db, "posts"), orderBy("createdAt", "desc"));
+
+      unsubFeed = onSnapshot(
+        q,
+        (snap) => {
+          feedEl.innerHTML = "";
+          if (snap.empty) {
+            feedStatus.textContent = "Пока нет публикаций — будьте первым!";
+            return;
+          }
+          feedStatus.textContent = "";
+          snap.forEach((d) => {
+            feedEl.appendChild(renderPost(d.id, d.data()));
+          });
+        },
+        (err) => {
+          console.error("Feed error:", err);
+          feedStatus.textContent = "Не удалось загрузить ленту. Проверьте Firestore и правила.";
+        }
+      );
+    }
+
+    /* ===== СОСТОЯНИЕ АВТОРИЗАЦИИ ===== */
+    onAuthStateChanged(auth, (user) => {
+      if (unsubFeed) {
+        unsubFeed();
+        unsubFeed = null;
+      }
+
+      if (user) {
+        const nick = user.displayName || (user.email || "").split("@")[0];
+        userNick.textContent = "@" + nick;
+        userAvatar.textContent = nick.charAt(0);
+
+        authScreen.classList.add("hidden");
+        profileScreen.classList.remove("hidden");
+        logoutBtn.classList.remove("hidden");
+        setError("");
+
+        loadFeed();
+      } else {
+        profileScreen.classList.add("hidden");
+        authScreen.classList.remove("hidden");
+        logoutBtn.classList.add("hidden");
+
+        feedEl.innerHTML = "";
+        feedStatus.textContent = "";
+        loginForm.reset();
+        registerForm.reset();
+        setError("");
+      }
+    });
+
+    /* ===== НИЖНЯЯ НАВИГАЦИЯ (визуально) ===== */
+    document.querySelectorAll(".nav-item").forEach((item) => {
+      item.addEventListener("click", () => {
+        document.querySelectorAll(".nav-item").forEach((i) => i.classList.remove("active"));
+        item.classList.add("active");
+      });
+    });
+  </script>
+</body>
+</html>
