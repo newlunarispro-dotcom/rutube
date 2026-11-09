@@ -6,466 +6,294 @@
   <title>UltraApp PRO</title>
 
   <style>
-    /* ===== БАЗА ===== */
     :root {
       --bg: #0b0d14;
-      --card-bg: rgba(255, 255, 255, 0.06);
-      --card-border: rgba(255, 255, 255, 0.12);
-      --accent-grad: linear-gradient(135deg, #6366f1, #a855f7, #ec4899);
+      --card-bg: rgba(255,255,255,.06);
+      --card-border: rgba(255,255,255,.12);
+      --accent-grad: linear-gradient(135deg,#6366f1,#a855f7,#ec4899);
       --text: #ffffff;
       --text-sub: #94a3b8;
       --danger: #fb7185;
+      --ok: #34d399;
     }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      user-select: none;
-      -webkit-tap-highlight-color: transparent;
-    }
-
+    * { box-sizing: border-box; margin: 0; padding: 0;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        user-select: none; -webkit-tap-highlight-color: transparent; }
     body {
-      background-color: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      overflow: hidden;
-      position: relative;
+      background-color: var(--bg); color: var(--text);
+      min-height: 100vh; display: flex; justify-content: center; align-items: center;
+      overflow: hidden; position: relative;
     }
 
-    /* ===== ФОНОВЫЕ СФЕРЫ ===== */
-    .bg-sphere {
-      position: absolute;
-      border-radius: 50%;
-      filter: blur(90px);
-      z-index: 0;
-      animation: float 12s infinite ease-in-out alternate;
-    }
+    .bg-sphere { position: absolute; border-radius: 50%; filter: blur(90px); z-index: 0;
+                 animation: float 12s infinite ease-in-out alternate; }
     .sphere-1 { width: 350px; height: 350px; background: #6366f1; top: -80px; left: -80px; }
     .sphere-2 { width: 300px; height: 300px; background: #ec4899; bottom: -60px; right: -60px; animation-delay: -6s; }
-    .sphere-3 {
-      width: 200px; height: 200px; background: #8b5cf6;
-      top: 40%; left: 50%; transform: translate(-50%, -50%);
-      animation: pulse 8s infinite alternate;
-    }
+    .sphere-3 { width: 200px; height: 200px; background: #8b5cf6;
+                top: 40%; left: 50%; transform: translate(-50%,-50%);
+                animation: pulse 8s infinite alternate; }
+    @keyframes float { 0%{transform:translate(0,0) scale(1)} 100%{transform:translate(50px,60px) scale(1.18)} }
+    @keyframes pulse { 0%{opacity:.3;transform:translate(-50%,-50%) scale(.8)} 100%{opacity:.7;transform:translate(-50%,-50%) scale(1.2)} }
 
-    @keyframes float {
-      0% { transform: translate(0, 0) scale(1); }
-      100% { transform: translate(50px, 60px) scale(1.18); }
-    }
-    @keyframes pulse {
-      0% { opacity: 0.3; transform: translate(-50%, -50%) scale(0.8); }
-      100% { opacity: 0.7; transform: translate(-50%, -50%) scale(1.2); }
-    }
-
-    /* ===== КОНТЕЙНЕР ===== */
     .app-container {
-      position: relative;
-      z-index: 1;
-      width: 100%;
-      max-width: 430px;
-      height: 92vh;
-      background: var(--card-bg);
-      backdrop-filter: blur(30px);
-      -webkit-backdrop-filter: blur(30px);
-      border: 1px solid var(--card-border);
-      border-radius: 32px;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.2);
+      position: relative; z-index: 1; width: 100%; max-width: 430px; height: 92vh;
+      background: var(--card-bg); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
+      border: 1px solid var(--card-border); border-radius: 32px;
+      display: flex; flex-direction: column; overflow: hidden;
+      box-shadow: 0 30px 60px rgba(0,0,0,.6), inset 0 1px 1px rgba(255,255,255,.2);
     }
 
-    /* ===== ШАПКА ===== */
-    .header {
-      position: relative;
-      padding: 20px 22px;
-      text-align: center;
-      border-bottom: 1px solid var(--card-border);
-      background: rgba(0, 0, 0, 0.2);
-    }
-    .header h1 {
-      font-size: 1.5rem;
-      font-weight: 800;
-      letter-spacing: 0.5px;
-      background: var(--accent-grad);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    .btn-logout {
-      position: absolute;
-      right: 14px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 38px;
-      height: 38px;
-      border-radius: 12px;
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid var(--card-border);
-      color: var(--text-sub);
-      cursor: pointer;
-      font-size: 1.05rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.3s;
-    }
-    .btn-logout:hover {
-      color: var(--danger);
-      border-color: rgba(251, 113, 133, 0.5);
-      background: rgba(251, 113, 133, 0.1);
-    }
+    .header { position: relative; padding: 18px 22px; text-align: center;
+              border-bottom: 1px solid var(--card-border); background: rgba(0,0,0,.2); }
+    .header h1 { font-size: 1.35rem; font-weight: 800; letter-spacing: .5px;
+                 background: var(--accent-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .btn-icon { position: absolute; top: 50%; transform: translateY(-50%);
+                width: 36px; height: 36px; border-radius: 12px;
+                background: rgba(255,255,255,.06); border: 1px solid var(--card-border);
+                color: var(--text-sub); cursor: pointer; font-size: 1rem;
+                display: flex; align-items: center; justify-content: center; transition: all .3s; }
+    .btn-icon:hover { color: #fff; background: rgba(255,255,255,.12); }
+    #logout-btn { right: 14px; }
+    #logout-btn:hover { color: var(--danger); border-color: rgba(251,113,133,.5); background: rgba(251,113,133,.1); }
+    #back-btn { left: 14px; }
 
-    /* ===== КОНТЕНТ ===== */
-    .content {
-      flex: 1;
-      padding: 20px;
-      overflow-y: auto;
-      position: relative;
-    }
+    .content { flex: 1; padding: 18px; overflow-y: auto; position: relative; }
+    .content::-webkit-scrollbar { width: 6px; }
+    .content::-webkit-scrollbar-thumb { background: rgba(255,255,255,.1); border-radius: 3px; }
 
-    /* ===== ЭКРАН АВТОРИЗАЦИИ ===== */
-    .auth-card {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 100%;
-      gap: 20px;
-      text-align: center;
-      animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .auth-head {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 14px;
-      margin-bottom: 4px;
-    }
-    .auth-head p {
-      color: var(--text-sub);
-      font-size: 0.9rem;
-      line-height: 1.5;
-      max-width: 300px;
-    }
-    .logo-mark {
-      width: 64px;
-      height: 64px;
-      border-radius: 20px;
-      background: var(--accent-grad);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.8rem;
-      font-weight: 800;
-      color: #fff;
-      box-shadow: 0 10px 30px rgba(168, 85, 247, 0.45);
-    }
+    /* AUTH */
+    .auth-card { display: flex; flex-direction: column; align-items: center; justify-content: center;
+                 min-height: 100%; gap: 18px; text-align: center; animation: fadeIn .6s cubic-bezier(.16,1,.3,1); }
+    .auth-head { display: flex; flex-direction: column; align-items: center; gap: 14px; }
+    .auth-head p { color: var(--text-sub); font-size: .9rem; line-height: 1.5; max-width: 300px; }
+    .logo-mark { width: 64px; height: 64px; border-radius: 20px; background: var(--accent-grad);
+                 display: flex; align-items: center; justify-content: center;
+                 font-size: 1.8rem; font-weight: 800; color: #fff;
+                 box-shadow: 0 10px 30px rgba(168,85,247,.45); }
 
-    /* Табы */
-    .tabs {
-      display: flex;
-      gap: 6px;
-      width: 100%;
-      padding: 6px;
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid var(--card-border);
-      border-radius: 18px;
-    }
-    .tab {
-      flex: 1;
-      padding: 12px;
-      border: none;
-      border-radius: 13px;
-      background: transparent;
-      color: var(--text-sub);
-      font-weight: 700;
-      font-size: 0.95rem;
-      cursor: pointer;
-      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-    .tab.active {
-      background: var(--accent-grad);
-      color: #fff;
-      box-shadow: 0 6px 18px rgba(168, 85, 247, 0.4);
-    }
-    .tab:not(.active):hover {
-      color: #fff;
-      background: rgba(255, 255, 255, 0.06);
-    }
+    .tabs { display: flex; gap: 6px; width: 100%; padding: 6px;
+            background: rgba(255,255,255,.04); border: 1px solid var(--card-border); border-radius: 18px; }
+    .tab { flex: 1; padding: 12px; border: none; border-radius: 13px; background: transparent;
+           color: var(--text-sub); font-weight: 700; font-size: .95rem; cursor: pointer;
+           transition: all .3s cubic-bezier(.34,1.56,.64,1); }
+    .tab.active { background: var(--accent-grad); color: #fff; box-shadow: 0 6px 18px rgba(168,85,247,.4); }
+    .tab:not(.active):hover { color: #fff; background: rgba(255,255,255,.06); }
 
-    /* Формы */
-    .auth-form {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      width: 100%;
-      animation: fadeIn 0.4s ease;
+    .auth-form { display: flex; flex-direction: column; gap: 12px; width: 100%; animation: fadeIn .4s ease; }
+    .field input, .field select, .field textarea {
+      width: 100%; padding: 15px 18px; background: rgba(255,255,255,.05);
+      border: 1px solid var(--card-border); border-radius: 16px; color: #fff;
+      font-size: .96rem; outline: none; transition: border-color .3s, box-shadow .3s, background .3s;
+      font-family: inherit;
     }
-    .field { width: 100%; }
-    .field input {
-      width: 100%;
-      padding: 16px 18px;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid var(--card-border);
-      border-radius: 16px;
-      color: #fff;
-      font-size: 0.98rem;
-      outline: none;
-      transition: border-color 0.3s, box-shadow 0.3s, background 0.3s;
-    }
-    .field input::placeholder { color: #64748b; }
-    .field input:focus {
-      border-color: rgba(168, 85, 247, 0.6);
-      box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.15);
-      background: rgba(255, 255, 255, 0.07);
+    .field textarea { resize: none; line-height: 1.45; min-height: 90px; }
+    .field select option { background: #0b0d14; color: #fff; }
+    .field input::placeholder, .field textarea::placeholder { color: #64748b; }
+    .field input:focus, .field select:focus, .field textarea:focus {
+      border-color: rgba(168,85,247,.6); box-shadow: 0 0 0 3px rgba(168,85,247,.15); background: rgba(255,255,255,.07);
     }
 
     .btn-primary {
-      width: 100%;
-      padding: 16px;
-      border: none;
-      border-radius: 16px;
-      background: var(--accent-grad);
-      color: #fff;
-      font-weight: 700;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      width: 100%; padding: 15px; border: none; border-radius: 16px;
+      background: var(--accent-grad); color: #fff; font-weight: 700; font-size: .98rem; cursor: pointer;
+      transition: all .3s cubic-bezier(.34,1.56,.64,1);
     }
-    .btn-primary:hover:not(:disabled) {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 25px rgba(168, 85, 247, 0.4);
-    }
-    .btn-primary:active:not(:disabled) { transform: scale(0.97); }
-    .btn-primary:disabled { opacity: 0.6; cursor: wait; }
+    .btn-primary:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(168,85,247,.4); }
+    .btn-primary:active:not(:disabled) { transform: scale(.97); }
+    .btn-primary:disabled { opacity: .6; cursor: wait; }
 
-    .error-msg {
-      color: var(--danger);
-      font-size: 0.85rem;
-      min-height: 20px;
-      text-align: center;
-      line-height: 1.4;
+    .btn-small {
+      padding: 8px 14px; border: none; border-radius: 10px; cursor: pointer;
+      background: var(--accent-grad); color: #fff; font-weight: 700; font-size: .82rem;
+      transition: transform .2s;
     }
+    .btn-small:hover { transform: scale(1.05); }
+    .btn-small.ghost { background: rgba(255,255,255,.06); border: 1px solid var(--card-border); }
+    .btn-small.danger { background: rgba(251,113,133,.15); color: var(--danger); border: 1px solid rgba(251,113,133,.4); }
+    .btn-small.ok { background: rgba(52,211,153,.15); color: var(--ok); border: 1px solid rgba(52,211,153,.4); }
 
-    /* ===== ПРОФИЛЬ ===== */
-    .profile-card {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 14px;
-      animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .avatar-wrapper {
-      position: relative;
-      padding: 4px;
-      background: var(--accent-grad);
-      border-radius: 50%;
-      animation: pulseGlow 3s infinite alternate;
-    }
-    .avatar {
-      width: 96px;
-      height: 96px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 2.4rem;
-      font-weight: 800;
-      color: #a855f7;
-      background: linear-gradient(135deg, #1e293b, #0f172a);
-      text-transform: uppercase;
-    }
-    @keyframes pulseGlow {
-      0% { box-shadow: 0 0 20px rgba(99, 102, 241, 0.4); }
-      100% { box-shadow: 0 0 40px rgba(236, 72, 153, 0.8); }
-    }
+    .error-msg { color: var(--danger); font-size: .85rem; min-height: 18px; text-align: center;
+                 line-height: 1.4; word-break: break-word; }
+    .ok-msg { color: var(--ok); font-size: .85rem; text-align: center; word-break: break-word; }
 
-    /* Поле публикации */
+    /* VIEWS */
+    .view { display: flex; flex-direction: column; gap: 14px; animation: slideUp .4s cubic-bezier(.16,1,.3,1); }
+    .view.hidden { display: none !important; }
+
+    .profile-mini {
+      display: flex; align-items: center; gap: 12px; padding: 12px 14px;
+      background: rgba(255,255,255,.04); border: 1px solid var(--card-border); border-radius: 18px;
+    }
+    .profile-mini .avatar {
+      width: 44px; height: 44px; border-radius: 50%; background: var(--accent-grad);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 800; font-size: 1.1rem; text-transform: uppercase;
+    }
+    .profile-mini .who { display: flex; flex-direction: column; gap: 2px; }
+    .profile-mini .nick { font-weight: 700; font-size: .95rem; }
+    .profile-mini .sub { font-size: .75rem; color: var(--text-sub); }
+
     .post-box {
-      width: 100%;
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid var(--card-border);
-      border-radius: 20px;
-      padding: 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      transition: border-color 0.3s;
+      background: rgba(255,255,255,.04); border: 1px solid var(--card-border);
+      border-radius: 18px; padding: 14px; display: flex; flex-direction: column; gap: 10px;
     }
-    .post-box:focus-within { border-color: rgba(168, 85, 247, 0.5); }
-    textarea {
-      width: 100%;
-      background: transparent;
-      border: none;
-      outline: none;
-      color: #fff;
-      resize: none;
-      font-size: 0.95rem;
-      line-height: 1.4;
-      max-height: 140px;
+    .post-box textarea {
+      width: 100%; background: transparent; border: none; outline: none; color: #fff;
+      resize: none; font-size: .93rem; line-height: 1.4; max-height: 120px; font-family: inherit;
     }
-    textarea::placeholder { color: #64748b; }
+    .post-box textarea::placeholder { color: #64748b; }
     .btn-post {
-      align-self: flex-end;
-      background: var(--accent-grad);
-      color: #fff;
-      border: none;
-      padding: 10px 22px;
-      border-radius: 14px;
-      font-weight: 700;
-      font-size: 0.9rem;
-      cursor: pointer;
-      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      align-self: flex-end; background: var(--accent-grad); color: #fff; border: none;
+      padding: 9px 20px; border-radius: 12px; font-weight: 700; font-size: .86rem;
+      cursor: pointer; transition: all .3s;
     }
-    .btn-post:hover:not(:disabled) {
-      transform: scale(1.05);
-      box-shadow: 0 5px 20px rgba(168, 85, 247, 0.4);
-    }
-    .btn-post:disabled { opacity: 0.6; cursor: wait; }
+    .btn-post:disabled { opacity: .6; cursor: wait; }
 
-    /* Лента */
-    .feed-status {
-      width: 100%;
-      color: var(--text-sub);
-      font-size: 0.85rem;
-      text-align: center;
-      min-height: 18px;
-    }
-    .feed {
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
+    .section-title { font-size: .8rem; font-weight: 700; color: var(--text-sub);
+                     text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; }
+
+    .feed-status { color: var(--text-sub); font-size: .82rem; text-align: center; min-height: 16px;
+                   word-break: break-word; line-height: 1.4; }
+    .feed-status.err { color: var(--danger); }
+
+    .feed { display: flex; flex-direction: column; gap: 10px; }
     .post-card {
-      width: 100%;
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid var(--card-border);
-      border-radius: 18px;
-      padding: 14px 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      animation: slideUp 0.4s ease-out;
+      background: rgba(255,255,255,.04); border: 1px solid var(--card-border);
+      border-radius: 16px; padding: 12px 14px; display: flex; flex-direction: column; gap: 8px;
+      animation: slideUp .35s ease-out;
     }
-    .post-head {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
+    .post-head { display: flex; align-items: center; gap: 10px; }
     .post-avatar {
-      width: 34px;
-      height: 34px;
-      border-radius: 50%;
-      background: var(--accent-grad);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
-      font-size: 0.9rem;
-      flex-shrink: 0;
-      text-transform: uppercase;
+      width: 32px; height: 32px; border-radius: 50%; background: var(--accent-grad);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: .85rem; flex-shrink: 0; text-transform: uppercase;
     }
-    .post-author {
-      font-weight: 700;
-      font-size: 0.9rem;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      max-width: 150px;
-    }
-    .post-meta {
-      margin-left: auto;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      flex-shrink: 0;
-    }
-    .post-time { font-size: 0.72rem; color: var(--text-sub); }
-    .post-del {
-      background: transparent;
-      border: none;
-      color: #64748b;
-      cursor: pointer;
-      font-size: 0.95rem;
-      padding: 4px 7px;
-      border-radius: 8px;
-      transition: all 0.2s;
-    }
-    .post-del:hover {
-      color: var(--danger);
-      background: rgba(251, 113, 133, 0.1);
-    }
-    .post-text {
-      font-size: 0.95rem;
-      line-height: 1.45;
-      color: #fff;
-      word-break: break-word;
-      white-space: pre-wrap;
-    }
+    .post-author { font-weight: 700; font-size: .88rem; overflow: hidden;
+                   text-overflow: ellipsis; white-space: nowrap; max-width: 140px; }
+    .post-meta { margin-left: auto; display: flex; align-items: center; gap: 4px; }
+    .post-time { font-size: .7rem; color: var(--text-sub); }
+    .post-del { background: transparent; border: none; color: #64748b; cursor: pointer;
+                font-size: .9rem; padding: 3px 6px; border-radius: 6px; }
+    .post-del:hover { color: var(--danger); background: rgba(251,113,133,.1); }
+    .post-text { font-size: .92rem; line-height: 1.45; color: #fff; word-break: break-word; white-space: pre-wrap; }
 
-    /* ===== НИЖНЯЯ НАВИГАЦИЯ ===== */
+    /* SEARCH */
+    .search-bar { display: flex; gap: 8px; }
+    .search-bar input { flex: 1; padding: 13px 16px; background: rgba(255,255,255,.05);
+                        border: 1px solid var(--card-border); border-radius: 14px; color: #fff;
+                        outline: none; font-size: .94rem; }
+    .search-bar input:focus { border-color: rgba(168,85,247,.6); }
+    .search-bar button { padding: 0 18px; border: none; border-radius: 14px;
+                         background: var(--accent-grad); color: #fff; font-weight: 700; cursor: pointer; }
+
+    .user-result {
+      display: flex; align-items: center; gap: 12px; padding: 12px 14px;
+      background: rgba(255,255,255,.04); border: 1px solid var(--card-border);
+      border-radius: 14px; animation: slideUp .3s ease-out;
+    }
+    .user-result .avatar { width: 38px; height: 38px; border-radius: 50%; background: var(--accent-grad);
+                           display: flex; align-items: center; justify-content: center;
+                           font-weight: 800; font-size: .95rem; text-transform: uppercase; flex-shrink: 0; }
+    .user-result .nick { font-weight: 700; font-size: .92rem; }
+    .user-result button { margin-left: auto; }
+
+    /* CHATS */
+    .chat-row {
+      display: flex; align-items: center; gap: 12px; padding: 12px 14px;
+      background: rgba(255,255,255,.04); border: 1px solid var(--card-border);
+      border-radius: 14px; cursor: pointer; transition: background .2s;
+      animation: slideUp .3s ease-out;
+    }
+    .chat-row:hover { background: rgba(255,255,255,.07); }
+    .chat-row .avatar { width: 38px; height: 38px; border-radius: 50%; background: var(--accent-grad);
+                        display: flex; align-items: center; justify-content: center;
+                        font-weight: 800; font-size: .95rem; text-transform: uppercase; flex-shrink: 0; }
+    .chat-row .info { flex: 1; min-width: 0; }
+    .chat-row .name { font-weight: 700; font-size: .92rem; }
+    .chat-row .last { font-size: .78rem; color: var(--text-sub); overflow: hidden;
+                      text-overflow: ellipsis; white-space: nowrap; margin-top: 2px; }
+
+    /* CHAT VIEW */
+    .chat-messages { display: flex; flex-direction: column; gap: 8px;
+                     padding-bottom: 8px; min-height: 200px; }
+    .msg {
+      max-width: 78%; padding: 9px 13px; border-radius: 16px;
+      font-size: .9rem; line-height: 1.4; word-break: break-word; white-space: pre-wrap;
+      animation: slideUp .25s ease-out;
+    }
+    .msg.me { align-self: flex-end; background: var(--accent-grad); color: #fff; border-bottom-right-radius: 4px; }
+    .msg.them { align-self: flex-start; background: rgba(255,255,255,.08);
+                border: 1px solid var(--card-border); color: #fff; border-bottom-left-radius: 4px; }
+    .msg .t { display: block; font-size: .65rem; opacity: .7; margin-top: 3px; }
+
+    .chat-input { display: flex; gap: 8px; padding-top: 8px;
+                  border-top: 1px solid var(--card-border); margin-top: 8px; }
+    .chat-input input { flex: 1; padding: 12px 16px; background: rgba(255,255,255,.05);
+                        border: 1px solid var(--card-border); border-radius: 14px;
+                        color: #fff; outline: none; font-size: .93rem; }
+    .chat-input input:focus { border-color: rgba(168,85,247,.6); }
+    .chat-input button { padding: 0 18px; border: none; border-radius: 14px;
+                         background: var(--accent-grad); color: #fff; font-weight: 700;
+                         cursor: pointer; font-size: .9rem; }
+
+    /* RP */
+    .rp-box { background: rgba(255,255,255,.04); border: 1px solid var(--card-border);
+              border-radius: 18px; padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+    .rp-hint { font-size: .82rem; color: var(--text-sub); line-height: 1.5; }
+
+    .order-card {
+      background: rgba(255,255,255,.04); border: 1px solid var(--card-border);
+      border-radius: 14px; padding: 12px 14px; display: flex; flex-direction: column; gap: 6px;
+      animation: slideUp .3s ease-out;
+    }
+    .order-head { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .badge { font-size: .7rem; padding: 3px 8px; border-radius: 8px; font-weight: 700; }
+    .badge.model { background: rgba(99,102,241,.18); color: #a5b4fc; }
+    .badge.pending { background: rgba(234,179,8,.15); color: #facc15; }
+    .badge.added { background: rgba(52,211,153,.15); color: var(--ok); }
+    .order-nick { font-weight: 700; font-size: .88rem; }
+    .order-prompt { font-size: .86rem; color: #e2e8f0; white-space: pre-wrap; word-break: break-word; }
+    .order-actions { display: flex; gap: 6px; margin-top: 4px; flex-wrap: wrap; }
+
+    /* NAV */
     .nav-bar {
-      display: flex;
-      justify-content: space-around;
-      padding: 16px;
-      border-top: 1px solid var(--card-border);
-      background: rgba(0, 0, 0, 0.3);
+      display: flex; justify-content: space-around; padding: 12px 8px;
+      border-top: 1px solid var(--card-border); background: rgba(0,0,0,.3);
     }
+    .nav-bar.hidden { display: none; }
     .nav-item {
-      color: var(--text-sub);
-      font-size: 1.3rem;
-      cursor: pointer;
-      transition: all 0.3s;
-      padding: 6px 16px;
-      border-radius: 12px;
+      color: var(--text-sub); font-size: 1.2rem; cursor: pointer;
+      transition: all .25s; padding: 8px 14px; border-radius: 12px;
     }
-    .nav-item.active {
-      color: #a855f7;
-      background: rgba(168, 85, 247, 0.15);
-      transform: translateY(-2px);
-    }
+    .nav-item.active { color: #a855f7; background: rgba(168,85,247,.15); transform: translateY(-2px); }
+    .nav-item.hidden { display: none; }
 
-    /* ===== АНИМАЦИИ ===== */
-    @keyframes fadeIn {
-      from { opacity: 0; transform: scale(0.96); }
-      to { opacity: 1; transform: scale(1); }
-    }
-    @keyframes slideUp {
-      from { opacity: 0; transform: translateY(24px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
+    @keyframes fadeIn { from{opacity:0;transform:scale(.96)} to{opacity:1;transform:scale(1)} }
+    @keyframes slideUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
     .hidden { display: none !important; }
   </style>
 </head>
 <body>
 
-  <!-- Фон -->
   <div class="bg-sphere sphere-1"></div>
   <div class="bg-sphere sphere-2"></div>
   <div class="bg-sphere sphere-3"></div>
 
-  <!-- Приложение -->
   <div class="app-container">
 
     <div class="header">
-      <h1>UltraApp PRO</h1>
-      <button id="logout-btn" class="btn-logout hidden" title="Выйти" type="button">⏻</button>
+      <button id="back-btn" class="btn-icon hidden" title="Назад" type="button">←</button>
+      <h1 id="header-title">UltraApp PRO</h1>
+      <button id="logout-btn" class="btn-icon hidden" title="Выйти" type="button">⏻</button>
     </div>
 
     <div class="content">
 
-      <!-- Экран авторизации -->
+      <!-- AUTH -->
       <div id="auth-screen" class="auth-card">
         <div class="auth-head">
           <div class="logo-mark">U</div>
-          <p>Войдите или создайте аккаунт по нику и паролю — это займёт пару секунд</p>
+          <p>Войдите или создайте аккаунт по нику и паролю</p>
         </div>
 
         <div class="tabs">
@@ -473,58 +301,123 @@
           <button class="tab" data-tab="register" type="button">Регистрация</button>
         </div>
 
-        <!-- Вход -->
         <form id="login-form" class="auth-form" novalidate>
-          <div class="field">
-            <input name="nick" type="text" placeholder="Ник (3–20 символов)" autocomplete="username" maxlength="20">
-          </div>
-          <div class="field">
-            <input name="pass" type="password" placeholder="Пароль" autocomplete="current-password">
-          </div>
+          <div class="field"><input name="nick" type="text" placeholder="Ник" autocomplete="username" maxlength="20"></div>
+          <div class="field"><input name="pass" type="password" placeholder="Пароль" autocomplete="current-password"></div>
           <button type="submit" class="btn-primary">Войти</button>
         </form>
 
-        <!-- Регистрация -->
         <form id="register-form" class="auth-form hidden" novalidate>
-          <div class="field">
-            <input name="nick" type="text" placeholder="Ник (3–20 символов)" autocomplete="username" maxlength="20">
-          </div>
-          <div class="field">
-            <input name="pass" type="password" placeholder="Пароль (минимум 6 символов)" autocomplete="new-password">
-          </div>
-          <div class="field">
-            <input name="pass2" type="password" placeholder="Повторите пароль" autocomplete="new-password">
-          </div>
+          <div class="field"><input name="nick" type="text" placeholder="Ник (3–20 симв.)" autocomplete="username" maxlength="20"></div>
+          <div class="field"><input name="pass" type="password" placeholder="Пароль (мин. 6)" autocomplete="new-password"></div>
+          <div class="field"><input name="pass2" type="password" placeholder="Повторите пароль" autocomplete="new-password"></div>
           <button type="submit" class="btn-primary">Создать аккаунт</button>
         </form>
 
         <div id="auth-error" class="error-msg"></div>
       </div>
 
-      <!-- Экран профиля -->
-      <div id="profile-screen" class="profile-card hidden">
-        <div class="avatar-wrapper">
-          <div id="user-avatar" class="avatar">?</div>
-        </div>
-        <h2 id="user-nick" style="font-size: 1.2rem; font-weight: 700;">@user</h2>
+      <!-- APP -->
+      <div id="app-screen" class="hidden">
 
-        <!-- Создание поста -->
-        <div class="post-box">
-          <textarea id="post-input" rows="3" maxlength="1000" placeholder="Что у вас нового? Поделитесь с миром..."></textarea>
-          <button id="post-btn" class="btn-post" type="button">Опубликовать</button>
+        <!-- FEED -->
+        <div id="view-feed" class="view">
+          <div class="profile-mini">
+            <div class="avatar" id="mini-avatar">?</div>
+            <div class="who">
+              <div class="nick" id="mini-nick">@user</div>
+              <div class="sub">Аккаунт активен</div>
+            </div>
+          </div>
+
+          <div class="post-box">
+            <textarea id="post-input" rows="3" maxlength="1000" placeholder="Что у вас нового? Поделитесь с миром..."></textarea>
+            <button id="post-btn" class="btn-post" type="button">Опубликовать</button>
+          </div>
+
+          <div class="section-title">Лента</div>
+          <div id="feed-status" class="feed-status"></div>
+          <div id="posts-feed" class="feed"></div>
         </div>
 
-        <div id="feed-status" class="feed-status"></div>
-        <div id="posts-feed" class="feed"></div>
+        <!-- SEARCH -->
+        <div id="view-search" class="view hidden">
+          <div class="section-title">Поиск людей</div>
+          <div class="search-bar">
+            <input id="search-input" type="text" placeholder="Введите ник..." maxlength="20">
+            <button id="search-btn" type="button">🔍</button>
+          </div>
+          <div id="search-status" class="feed-status"></div>
+          <div id="search-results" class="feed"></div>
+        </div>
+
+        <!-- CHATS -->
+        <div id="view-chats" class="view hidden">
+          <div class="section-title">Мои чаты</div>
+          <div id="chats-status" class="feed-status"></div>
+          <div id="chats-list" class="feed"></div>
+        </div>
+
+        <!-- CHAT -->
+        <div id="view-chat" class="view hidden">
+          <div class="profile-mini">
+            <div class="avatar" id="chat-avatar">?</div>
+            <div class="who">
+              <div class="nick" id="chat-nick">@user</div>
+              <div class="sub">Личный чат</div>
+            </div>
+          </div>
+          <div id="chat-messages" class="chat-messages"></div>
+          <div class="chat-input">
+            <input id="chat-input" type="text" placeholder="Сообщение..." maxlength="1000">
+            <button id="chat-send" type="button">➤</button>
+          </div>
+        </div>
+
+        <!-- RP -->
+        <div id="view-rp" class="view hidden">
+          <div class="section-title">Генератор RP</div>
+          <div class="rp-box">
+            <p class="rp-hint">Выберите модель (0.1 – 7.9) и опишите, какое RP вам нужно. Заказ уйдёт на сервер — админ добавит новые режимы/функции.</p>
+            <div class="field">
+              <select id="rp-model"></select>
+            </div>
+            <div class="field">
+              <textarea id="rp-prompt" rows="5" maxlength="2000" placeholder="Опишите пожелание к RP: стиль, персонаж, сюжет, режим..."></textarea>
+            </div>
+            <button id="rp-send" class="btn-primary" type="button">Отправить заказ</button>
+            <div id="rp-status" class="feed-status"></div>
+          </div>
+        </div>
+
+        <!-- ADMIN -->
+        <div id="view-admin" class="view hidden">
+          <div class="section-title">🛡️ Секретное меню — заказы RP</div>
+          <div id="admin-status" class="feed-status"></div>
+          <div id="admin-orders" class="feed"></div>
+
+          <div class="section-title" style="margin-top:14px;">Добавить новую модель / режим</div>
+          <div class="rp-box">
+            <div class="field"><input id="new-model-value" type="text" placeholder="Значение (например 8.1)" maxlength="10"></div>
+            <div class="field"><input id="new-model-label" type="text" placeholder="Название (например Модель 8.1 Pro)" maxlength="60"></div>
+            <button id="add-model-btn" class="btn-primary" type="button">Добавить на сервер (1 клик)</button>
+            <div id="add-model-status" class="feed-status"></div>
+          </div>
+
+          <div class="section-title" style="margin-top:14px;">Модели на сервере</div>
+          <div id="models-list" class="feed"></div>
+        </div>
+
       </div>
-
     </div>
 
-    <!-- Навигация -->
-    <div class="nav-bar">
-      <div class="nav-item active">🏠</div>
-      <div class="nav-item">🔥</div>
-      <div class="nav-item">👤</div>
+    <!-- NAV -->
+    <div class="nav-bar hidden" id="nav-bar">
+      <div class="nav-item active" data-view="feed">🏠</div>
+      <div class="nav-item" data-view="search">🔍</div>
+      <div class="nav-item" data-view="chats">💬</div>
+      <div class="nav-item" data-view="rp">🎨</div>
+      <div class="nav-item hidden" id="nav-admin" data-view="admin">🛡️</div>
     </div>
 
   </div>
@@ -533,26 +426,14 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-app.js";
     import { getAnalytics } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-analytics.js";
     import {
-      getAuth,
-      createUserWithEmailAndPassword,
-      signInWithEmailAndPassword,
-      signOut,
-      onAuthStateChanged,
-      updateProfile
+      getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword,
+      signOut, onAuthStateChanged, updateProfile
     } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-auth.js";
     import {
-      getFirestore,
-      collection,
-      query,
-      orderBy,
-      onSnapshot,
-      addDoc,
-      deleteDoc,
-      doc,
-      serverTimestamp
+      getFirestore, collection, doc, getDoc, getDocs, setDoc, updateDoc,
+      deleteDoc, addDoc, onSnapshot, query, where, orderBy, serverTimestamp
     } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-firestore.js";
 
-    /* ===== КОНФИГ ===== */
     const firebaseConfig = {
       apiKey: "AIzaSyCWy6OH5ZBfrXkJImajTzSaJCbr3hegUy4",
       authDomain: "ultraapprp.firebaseapp.com",
@@ -564,40 +445,50 @@
     };
 
     const app = initializeApp(firebaseConfig);
-    try { getAnalytics(app); } catch (e) { console.warn("Analytics недоступна:", e); }
+    try { getAnalytics(app); } catch(e) {}
 
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    /* ===== ХЕЛПЕРЫ ===== */
-    const NICK_RE = /^[a-zA-Z0-9_]{3,20}$/;
+    const NICK_RE = /^[a-zA-Z0-9_-]{3,20}$/;
+    const ADMIN_NICK = "91-91";
     const nickToEmail = (nick) => nick.toLowerCase() + "@ultraapp.app";
-
     const $ = (id) => document.getElementById(id);
 
-    const authScreen = $("auth-screen");
-    const profileScreen = $("profile-screen");
-    const loginForm = $("login-form");
-    const registerForm = $("register-form");
-    const authError = $("auth-error");
-    const logoutBtn = $("logout-btn");
-    const userNick = $("user-nick");
-    const userAvatar = $("user-avatar");
-    const postInput = $("post-input");
-    const postBtn = $("post-btn");
-    const feedEl = $("posts-feed");
-    const feedStatus = $("feed-status");
+    const DEFAULT_MODELS = [
+      { value: "0.1", label: "Модель 0.1" },
+      { value: "0.5", label: "Модель 0.5" },
+      { value: "1.0", label: "Модель 1.0" },
+      { value: "1.5", label: "Модель 1.5" },
+      { value: "2.0", label: "Модель 2.0" },
+      { value: "2.5", label: "Модель 2.5" },
+      { value: "3.0", label: "Модель 3.0" },
+      { value: "3.5", label: "Модель 3.5" },
+      { value: "4.0", label: "Модель 4.0" },
+      { value: "4.5", label: "Модель 4.5" },
+      { value: "5.0", label: "Модель 5.0" },
+      { value: "5.5", label: "Модель 5.5" },
+      { value: "6.0", label: "Модель 6.0" },
+      { value: "6.5", label: "Модель 6.5" },
+      { value: "7.0", label: "Модель 7.0" },
+      { value: "7.5", label: "Модель 7.5" },
+      { value: "7.9", label: "Модель 7.9" }
+    ];
 
+    // State
     let unsubFeed = null;
+    let unsubChats = null;
+    let unsubMessages = null;
+    let unsubOrders = null;
+    let unsubModels = null;
+    let currentChat = null;
+    let customModels = [];
 
-    function setError(text) {
-      authError.textContent = text || "";
-    }
-
+    // ---------- helpers ----------
     function setLoading(btn, isLoading, loadingText) {
       if (isLoading) {
-        btn.dataset.label = btn.textContent;
-        btn.textContent = loadingText || "Подождите…";
+        if (!btn.dataset.label) btn.dataset.label = btn.textContent;
+        btn.textContent = loadingText || "…";
         btn.disabled = true;
       } else {
         if (btn.dataset.label) btn.textContent = btn.dataset.label;
@@ -605,31 +496,42 @@
       }
     }
 
+    function firestoreErrorText(err) {
+      const code = (err && err.code) || "";
+      const msg = (err && err.message) || "неизвестно";
+      if (code === "permission-denied") return "Нет доступа (permission-denied): " + msg;
+      if (code === "unavailable") return "Нет соединения с Firestore";
+      if (code === "failed-precondition") return "Нужен индекс Firestore: " + msg;
+      return "Ошибка Firestore [" + code + "]: " + msg;
+    }
+
     function authErrorText(err) {
       const code = (err && err.code) || "";
       switch (code) {
-        case "auth/email-already-in-use":
-          return "Этот ник уже занят";
+        case "auth/email-already-in-use": return "Этот ник уже занят";
         case "auth/invalid-credential":
         case "auth/invalid-login-credentials":
         case "auth/wrong-password":
         case "auth/user-not-found":
-        case "auth/invalid-email":
-          return "Неверный ник или пароль";
-        case "auth/weak-password":
-          return "Слишком простой пароль (минимум 6 символов)";
-        case "auth/too-many-requests":
-          return "Слишком много попыток. Попробуйте позже";
-        case "auth/network-request-failed":
-          return "Нет соединения с сервером";
-        default:
-          return "Ошибка: " + ((err && err.message) || "неизвестно");
+        case "auth/invalid-email": return "Неверный ник или пароль";
+        case "auth/weak-password": return "Пароль слишком простой (мин. 6 символов)";
+        case "auth/too-many-requests": return "Слишком много попыток, попробуйте позже";
+        case "auth/network-request-failed": return "Нет соединения";
+        default: return "Ошибка: " + ((err && err.message) || "неизвестно");
       }
     }
 
+    function toDate(ts) {
+      if (!ts) return null;
+      if (typeof ts.toDate === "function") return ts.toDate();
+      if (ts instanceof Date) return ts;
+      if (typeof ts === "number") return new Date(ts);
+      return null;
+    }
+
     function formatTime(ts) {
-      if (!ts) return "Только что";
-      const date = typeof ts.toDate === "function" ? ts.toDate() : new Date(ts);
+      const date = toDate(ts);
+      if (!date) return "Только что";
       const diff = (Date.now() - date.getTime()) / 1000;
       if (diff < 60) return "Только что";
       if (diff < 3600) return Math.floor(diff / 60) + " мин назад";
@@ -643,229 +545,664 @@
       return u.displayName || (u.email || "").split("@")[0];
     }
 
-    /* ===== ТАБЫ ===== */
+    function isAdmin() { return currentNick() === ADMIN_NICK; }
+
+    // ---------- view switching ----------
+    const TITLES = {
+      feed: "UltraApp PRO",
+      search: "Поиск людей",
+      chats: "Мои чаты",
+      chat: "Чат",
+      rp: "Генератор RP",
+      admin: "🛡️ Админ-панель"
+    };
+
+    function showView(name) {
+      document.querySelectorAll(".view").forEach(v => v.classList.add("hidden"));
+      const v = $("view-" + name);
+      if (v) v.classList.remove("hidden");
+      document.querySelectorAll(".nav-item").forEach(i =>
+        i.classList.toggle("active", i.dataset.view === name)
+      );
+      $("header-title").textContent = TITLES[name] || "UltraApp PRO";
+      $("back-btn").classList.toggle("hidden", name !== "chat");
+      $("nav-bar").classList.toggle("hidden", name === "chat");
+
+      if (name === "chat" && !currentChat) showView("chats");
+      if (name === "chats") loadChats();
+      if (name === "admin") loadAdmin();
+      if (name === "rp") loadModelsIntoSelect();
+    }
+
+    document.querySelectorAll(".nav-item").forEach(item => {
+      item.addEventListener("click", () => showView(item.dataset.view));
+    });
+
+    $("back-btn").addEventListener("click", () => {
+      closeChat();
+      showView("chats");
+    });
+
+    // ---------- auth UI ----------
     const tabs = document.querySelectorAll(".tab");
-    tabs.forEach((tab) => {
+    tabs.forEach(tab => {
       tab.addEventListener("click", () => {
-        tabs.forEach((t) => t.classList.toggle("active", t === tab));
+        tabs.forEach(t => t.classList.toggle("active", t === tab));
         const isLogin = tab.dataset.tab === "login";
-        loginForm.classList.toggle("hidden", !isLogin);
-        registerForm.classList.toggle("hidden", isLogin);
-        setError("");
+        $("login-form").classList.toggle("hidden", !isLogin);
+        $("register-form").classList.toggle("hidden", isLogin);
+        $("auth-error").textContent = "";
       });
     });
 
-    /* ===== ВХОД ===== */
-    loginForm.addEventListener("submit", async (e) => {
+    $("login-form").addEventListener("submit", async (e) => {
       e.preventDefault();
-      setError("");
-
-      const nick = loginForm.elements.nick.value.trim();
-      const pass = loginForm.elements.pass.value;
-
-      if (!NICK_RE.test(nick)) {
-        setError("Ник: 3–20 символов, только латиница, цифры и _");
-        return;
-      }
-      if (pass.length < 6) {
-        setError("Пароль должен быть не менее 6 символов");
-        return;
-      }
-
-      const btn = loginForm.querySelector('button[type="submit"]');
+      const f = e.target;
+      const nick = f.elements.nick.value.trim();
+      const pass = f.elements.pass.value;
+      $("auth-error").textContent = "";
+      if (!NICK_RE.test(nick)) return $("auth-error").textContent = "Ник: 3–20, латиница/цифры/_/-";
+      if (pass.length < 6) return $("auth-error").textContent = "Пароль минимум 6 символов";
+      const btn = f.querySelector('button[type="submit"]');
       setLoading(btn, true, "Вход…");
-      try {
-        await signInWithEmailAndPassword(auth, nickToEmail(nick), pass);
-      } catch (err) {
-        setError(authErrorText(err));
-      } finally {
-        setLoading(btn, false);
-      }
+      try { await signInWithEmailAndPassword(auth, nickToEmail(nick), pass); }
+      catch (err) { $("auth-error").textContent = authErrorText(err); }
+      finally { setLoading(btn, false); }
     });
 
-    /* ===== РЕГИСТРАЦИЯ ===== */
-    registerForm.addEventListener("submit", async (e) => {
+    $("register-form").addEventListener("submit", async (e) => {
       e.preventDefault();
-      setError("");
-
-      const nick = registerForm.elements.nick.value.trim();
-      const pass = registerForm.elements.pass.value;
-      const pass2 = registerForm.elements.pass2.value;
-
-      if (!NICK_RE.test(nick)) {
-        setError("Ник: 3–20 символов, только латиница, цифры и _");
-        return;
-      }
-      if (pass.length < 6) {
-        setError("Пароль должен быть не менее 6 символов");
-        return;
-      }
-      if (pass !== pass2) {
-        setError("Пароли не совпадают");
-        return;
-      }
-
-      const btn = registerForm.querySelector('button[type="submit"]');
+      const f = e.target;
+      const nick = f.elements.nick.value.trim();
+      const pass = f.elements.pass.value;
+      const pass2 = f.elements.pass2.value;
+      $("auth-error").textContent = "";
+      if (!NICK_RE.test(nick)) return $("auth-error").textContent = "Ник: 3–20, латиница/цифры/_/-";
+      if (pass.length < 6) return $("auth-error").textContent = "Пароль минимум 6 символов";
+      if (pass !== pass2) return $("auth-error").textContent = "Пароли не совпадают";
+      const btn = f.querySelector('button[type="submit"]');
       setLoading(btn, true, "Создание…");
       try {
         const cred = await createUserWithEmailAndPassword(auth, nickToEmail(nick), pass);
-        try {
-          await updateProfile(cred.user, { displayName: nick });
-        } catch (e) {
-          console.warn("Не удалось сохранить ник:", e);
+        try { await updateProfile(cred.user, { displayName: nick }); } catch(e) {}
+      } catch (err) { $("auth-error").textContent = authErrorText(err); }
+      finally { setLoading(btn, false); }
+    });
+
+    $("logout-btn").addEventListener("click", () => signOut(auth).catch(console.error));
+
+    // ---------- user doc sync ----------
+    async function ensureUserDoc(user) {
+      const nick = user.displayName || (user.email || "").split("@")[0];
+      const ref = doc(db, "users", user.uid);
+      try {
+        const snap = await getDoc(ref);
+        if (!snap.exists()) {
+          await setDoc(ref, { uid: user.uid, nick, nickLower: nick.toLowerCase(), createdAt: serverTimestamp() });
+        } else if (snap.data().nick !== nick) {
+          await updateDoc(ref, { nick, nickLower: nick.toLowerCase() });
         }
-        registerForm.reset();
+      } catch (e) { console.warn("ensureUserDoc:", e); }
+    }
+
+    // ---------- POSTS ----------
+    $("post-btn").addEventListener("click", async () => {
+      const text = $("post-input").value.trim();
+      const status = $("feed-status");
+      if (!text) { status.textContent = "Введите текст"; return; }
+      if (!auth.currentUser) { status.textContent = "Сначала войдите"; return; }
+
+      const btn = $("post-btn");
+      setLoading(btn, true, "Публикация…");
+      status.classList.remove("err");
+      status.textContent = "";
+
+      const payload = {
+        text: text.slice(0, 1000),
+        authorId: auth.currentUser.uid,
+        authorName: currentNick(),
+        createdAt: serverTimestamp(),
+        createdAtMs: Date.now()
+      };
+
+      try {
+        const ref = await addDoc(collection(db, "posts"), payload);
+        console.log("Post created:", ref.id);
+        $("post-input").value = "";
+        status.textContent = "Опубликовано ✓";
+        setTimeout(() => { if (status.textContent === "Опубликовано ✓") status.textContent = ""; }, 2500);
       } catch (err) {
-        setError(authErrorText(err));
+        console.error("Publish error:", err);
+        status.classList.add("err");
+        status.textContent = firestoreErrorText(err);
+        alert("Не удалось опубликовать.\n\n" + firestoreErrorText(err) +
+              "\n\nПроверьте правила Firestore для коллекции posts — нужен allow create для авторизованных.");
       } finally {
         setLoading(btn, false);
       }
     });
 
-    /* ===== ВЫХОД ===== */
-    logoutBtn.addEventListener("click", () => {
-      signOut(auth).catch((e) => console.error(e));
-    });
-
-    /* ===== ПУБЛИКАЦИЯ ===== */
-    postBtn.addEventListener("click", async () => {
-      const text = postInput.value.trim();
-      if (!text || !auth.currentUser) return;
-
-      setLoading(postBtn, true, "Публикация…");
-      try {
-        await addDoc(collection(db, "posts"), {
-          text: text.slice(0, 1000),
-          authorId: auth.currentUser.uid,
-          authorName: currentNick(),
-          createdAt: serverTimestamp()
-        });
-        postInput.value = "";
-      } catch (err) {
-        console.error(err);
-        alert("Не удалось опубликовать: " + ((err && err.message) || err));
-      } finally {
-        setLoading(postBtn, false);
-      }
-    });
-
-    /* ===== РЕНДЕР ПОСТА ===== */
     function renderPost(id, data) {
       const card = document.createElement("div");
       card.className = "post-card";
-
       const head = document.createElement("div");
       head.className = "post-head";
-
       const av = document.createElement("div");
       av.className = "post-avatar";
       av.textContent = (data.authorName || "?").charAt(0);
-
       const name = document.createElement("div");
       name.className = "post-author";
       name.textContent = "@" + (data.authorName || "user");
-
       const meta = document.createElement("div");
       meta.className = "post-meta";
-
       const time = document.createElement("div");
       time.className = "post-time";
-      time.textContent = formatTime(data.createdAt);
+      time.textContent = formatTime(data.createdAt || data.createdAtMs);
       meta.appendChild(time);
-
-      const uid = auth.currentUser ? auth.currentUser.uid : null;
+      const uid = auth.currentUser && auth.currentUser.uid;
       if (uid && data.authorId === uid) {
         const del = document.createElement("button");
         del.className = "post-del";
         del.type = "button";
-        del.title = "Удалить";
         del.textContent = "✕";
         del.addEventListener("click", async () => {
           del.disabled = true;
-          try {
-            await deleteDoc(doc(db, "posts", id));
-          } catch (err) {
-            console.error(err);
-            del.disabled = false;
-          }
+          try { await deleteDoc(doc(db, "posts", id)); }
+          catch (err) { del.disabled = false; console.error(err); }
         });
         meta.appendChild(del);
       }
-
       head.append(av, name, meta);
-
-      const text = document.createElement("p");
-      text.className = "post-text";
-      text.textContent = data.text || "";
-
-      card.append(head, text);
+      const txt = document.createElement("p");
+      txt.className = "post-text";
+      txt.textContent = data.text || "";
+      card.append(head, txt);
       return card;
     }
 
-    /* ===== ЛЕНТА ===== */
     function loadFeed() {
-      feedStatus.textContent = "Загрузка ленты…";
-      feedEl.innerHTML = "";
+      const status = $("feed-status");
+      const feed = $("posts-feed");
+      status.textContent = "Загрузка ленты…";
+      status.classList.remove("err");
+      feed.innerHTML = "";
 
-      const q = query(collection(db, "posts"), orderBy("createdAt", "desc"));
-
+      if (unsubFeed) unsubFeed();
       unsubFeed = onSnapshot(
-        q,
+        collection(db, "posts"),
         (snap) => {
-          feedEl.innerHTML = "";
-          if (snap.empty) {
-            feedStatus.textContent = "Пока нет публикаций — будьте первым!";
-            return;
-          }
-          feedStatus.textContent = "";
-          snap.forEach((d) => {
-            feedEl.appendChild(renderPost(d.id, d.data()));
+          feed.innerHTML = "";
+          const items = [];
+          snap.forEach(d => {
+            const data = d.data();
+            const date = toDate(data.createdAt) || toDate(data.createdAtMs);
+            items.push({ id: d.id, data, time: date ? date.getTime() : 0 });
           });
+          items.sort((a, b) => b.time - a.time);
+          if (items.length === 0) { status.textContent = "Пока пусто — будьте первым!"; return; }
+          status.textContent = "";
+          items.forEach(({ id, data }) => feed.appendChild(renderPost(id, data)));
         },
         (err) => {
           console.error("Feed error:", err);
-          feedStatus.textContent = "Не удалось загрузить ленту. Проверьте Firestore и правила.";
+          status.classList.add("err");
+          status.textContent = "Лента: " + firestoreErrorText(err);
         }
       );
     }
 
-    /* ===== СОСТОЯНИЕ АВТОРИЗАЦИИ ===== */
-    onAuthStateChanged(auth, (user) => {
-      if (unsubFeed) {
-        unsubFeed();
-        unsubFeed = null;
+    // ---------- SEARCH ----------
+    $("search-btn").addEventListener("click", doSearch);
+    $("search-input").addEventListener("keydown", (e) => { if (e.key === "Enter") doSearch(); });
+
+    async function doSearch() {
+      const term = $("search-input").value.trim().toLowerCase();
+      const status = $("search-status");
+      const results = $("search-results");
+      results.innerHTML = "";
+      status.classList.remove("err");
+      if (!term) { status.textContent = "Введите ник"; return; }
+      status.textContent = "Поиск…";
+
+      try {
+        const q = query(collection(db, "users"), where("nickLower", "==", term));
+        const snap = await getDocs(q);
+        if (snap.empty) { status.textContent = "Никого не найдено"; return; }
+        status.textContent = "";
+        snap.forEach(d => {
+          const u = d.data();
+          if (u.uid === auth.currentUser.uid) return;
+          const row = document.createElement("div");
+          row.className = "user-result";
+          const av = document.createElement("div");
+          av.className = "avatar";
+          av.textContent = (u.nick || "?").charAt(0);
+          const nick = document.createElement("div");
+          nick.className = "nick";
+          nick.textContent = "@" + u.nick;
+          const btn = document.createElement("button");
+          btn.className = "btn-small";
+          btn.textContent = "Написать";
+          btn.addEventListener("click", () => openChat(u.uid, u.nick));
+          row.append(av, nick, btn);
+          results.appendChild(row);
+        });
+        if (!results.children.length) status.textContent = "Это вы :)";
+      } catch (err) {
+        console.error(err);
+        status.classList.add("err");
+        status.textContent = firestoreErrorText(err);
+      }
+    }
+
+    // ---------- CHATS ----------
+    function chatIdFor(a, b) { return [a, b].sort().join("_"); }
+
+    async function openChat(otherUid, otherNickName) {
+      const me = auth.currentUser.uid;
+      const myNick = currentNick();
+      const chatId = chatIdFor(me, otherUid);
+      currentChat = { chatId, otherUid, otherNick: otherNickName, myNick };
+
+      const ref = doc(db, "chats", chatId);
+      try {
+        const snap = await getDoc(ref);
+        if (!snap.exists()) {
+          await setDoc(ref, {
+            members: [me, otherUid],
+            memberNicks: { [me]: myNick, [otherUid]: otherNickName },
+            lastMessage: "",
+            lastMessageAt: serverTimestamp(),
+            lastMessageAtMs: Date.now()
+          });
+        }
+      } catch (err) {
+        console.error("chat init:", err);
+        alert("Не удалось открыть чат: " + firestoreErrorText(err));
+        return;
       }
 
-      if (user) {
-        const nick = user.displayName || (user.email || "").split("@")[0];
-        userNick.textContent = "@" + nick;
-        userAvatar.textContent = nick.charAt(0);
+      $("chat-nick").textContent = "@" + otherNickName;
+      $("chat-avatar").textContent = otherNickName.charAt(0);
+      $("chat-messages").innerHTML = "";
+      $("chat-input").value = "";
+      showView("chat");
 
-        authScreen.classList.add("hidden");
-        profileScreen.classList.remove("hidden");
-        logoutBtn.classList.remove("hidden");
-        setError("");
+      if (unsubMessages) unsubMessages();
+      unsubMessages = onSnapshot(
+        query(collection(db, "chats", chatId, "messages"), orderBy("createdAtMs", "asc")),
+        (snap) => {
+          const box = $("chat-messages");
+          box.innerHTML = "";
+          if (snap.empty) {
+            const hint = document.createElement("div");
+            hint.style.textAlign = "center";
+            hint.style.color = "var(--text-sub)";
+            hint.style.fontSize = ".85rem";
+            hint.style.padding = "20px";
+            hint.textContent = "Сообщений пока нет — напишите первым!";
+            box.appendChild(hint);
+            return;
+          }
+          snap.forEach(d => {
+            const m = d.data();
+            const div = document.createElement("div");
+            div.className = "msg " + (m.senderId === me ? "me" : "them");
+            div.textContent = m.text;
+            const t = document.createElement("span");
+            t.className = "t";
+            t.textContent = formatTime(m.createdAt || m.createdAtMs);
+            div.appendChild(t);
+            box.appendChild(div);
+          });
+          box.scrollTop = box.scrollHeight;
+        },
+        (err) => {
+          console.error("messages error:", err);
+          const box = $("chat-messages");
+          box.innerHTML = "";
+          const e = document.createElement("div");
+          e.style.color = "var(--danger)";
+          e.style.fontSize = ".85rem";
+          e.textContent = firestoreErrorText(err);
+          box.appendChild(e);
+        }
+      );
+    }
 
-        loadFeed();
-      } else {
-        profileScreen.classList.add("hidden");
-        authScreen.classList.remove("hidden");
-        logoutBtn.classList.add("hidden");
+    function closeChat() {
+      if (unsubMessages) { unsubMessages(); unsubMessages = null; }
+      currentChat = null;
+    }
 
-        feedEl.innerHTML = "";
-        feedStatus.textContent = "";
-        loginForm.reset();
-        registerForm.reset();
-        setError("");
+    $("chat-send").addEventListener("click", sendMessage);
+    $("chat-input").addEventListener("keydown", (e) => {
+      if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+    });
+
+    async function sendMessage() {
+      if (!currentChat) return;
+      const text = $("chat-input").value.trim();
+      if (!text) return;
+      const btn = $("chat-send");
+      btn.disabled = true;
+      try {
+        await addDoc(collection(db, "chats", currentChat.chatId, "messages"), {
+          text: text.slice(0, 1000),
+          senderId: auth.currentUser.uid,
+          senderNick: currentNick(),
+          createdAt: serverTimestamp(),
+          createdAtMs: Date.now()
+        });
+        await updateDoc(doc(db, "chats", currentChat.chatId), {
+          lastMessage: text.slice(0, 60),
+          lastMessageAt: serverTimestamp(),
+          lastMessageAtMs: Date.now()
+        });
+        $("chat-input").value = "";
+      } catch (err) {
+        console.error(err);
+        alert("Не удалось отправить: " + firestoreErrorText(err));
+      } finally {
+        btn.disabled = false;
+      }
+    }
+
+    function loadChats() {
+      const me = auth.currentUser.uid;
+      const status = $("chats-status");
+      const list = $("chats-list");
+      list.innerHTML = "";
+      status.classList.remove("err");
+      status.textContent = "Загрузка чатов…";
+
+      if (unsubChats) unsubChats();
+      unsubChats = onSnapshot(
+        query(collection(db, "chats"), where("members", "array-contains", me)),
+        (snap) => {
+          list.innerHTML = "";
+          if (snap.empty) { status.textContent = "У вас пока нет чатов. Найдите кого-нибудь в поиске."; return; }
+          status.textContent = "";
+          const arr = [];
+          snap.forEach(d => arr.push({ id: d.id, data: d.data() }));
+          arr.sort((a, b) => (b.data.lastMessageAtMs || 0) - (a.data.lastMessageAtMs || 0));
+          arr.forEach(({ id, data }) => {
+            const otherUid = (data.members || []).find(x => x !== me);
+            const otherNickName = (data.memberNicks && data.memberNicks[otherUid]) || "user";
+            const row = document.createElement("div");
+            row.className = "chat-row";
+            const av = document.createElement("div");
+            av.className = "avatar";
+            av.textContent = otherNickName.charAt(0);
+            const info = document.createElement("div");
+            info.className = "info";
+            const name = document.createElement("div");
+            name.className = "name";
+            name.textContent = "@" + otherNickName;
+            const last = document.createElement("div");
+            last.className = "last";
+            last.textContent = data.lastMessage || "Нет сообщений";
+            info.append(name, last);
+            row.append(av, info);
+            row.addEventListener("click", () => openChat(otherUid, otherNickName));
+            list.appendChild(row);
+          });
+        },
+        (err) => {
+          console.error("chats error:", err);
+          status.classList.add("err");
+          status.textContent = firestoreErrorText(err);
+        }
+      );
+    }
+
+    // ---------- RP MODELS ----------
+    function loadModelsIntoSelect() {
+      const sel = $("rp-model");
+      const current = sel.value;
+      sel.innerHTML = "";
+      const all = [...DEFAULT_MODELS, ...customModels.filter(c =>
+        !DEFAULT_MODELS.some(d => d.value === c.value)
+      )];
+      all.sort((a, b) => parseFloat(a.value) - parseFloat(b.value));
+      all.forEach(m => {
+        const opt = document.createElement("option");
+        opt.value = m.value;
+        opt.textContent = m.label + " (" + m.value + ")";
+        sel.appendChild(opt);
+      });
+      if (current) sel.value = current;
+
+      if (unsubModels) unsubModels();
+      unsubModels = onSnapshot(collection(db, "rp_models"), (snap) => {
+        customModels = [];
+        snap.forEach(d => {
+          const m = d.data();
+          if (m.value && m.label) customModels.push({ id: d.id, value: m.value, label: m.label });
+        });
+        const sel2 = $("rp-model");
+        const cur = sel2.value;
+        sel2.innerHTML = "";
+        const all2 = [...DEFAULT_MODELS, ...customModels.filter(c =>
+          !DEFAULT_MODELS.some(d => d.value === c.value)
+        )];
+        all2.sort((a, b) => parseFloat(a.value) - parseFloat(b.value));
+        all2.forEach(m => {
+          const opt = document.createElement("option");
+          opt.value = m.value;
+          opt.textContent = m.label + " (" + m.value + ")";
+          sel2.appendChild(opt);
+        });
+        if (cur) sel2.value = cur;
+      }, (e) => console.warn("models:", e));
+    }
+
+    // ---------- RP SEND ----------
+    $("rp-send").addEventListener("click", async () => {
+      const status = $("rp-status");
+      const model = $("rp-model").value;
+      const prompt = $("rp-prompt").value.trim();
+      status.classList.remove("err");
+      if (!prompt) { status.textContent = "Опишите пожелание к RP"; return; }
+      if (!auth.currentUser) { status.textContent = "Сначала войдите"; return; }
+
+      const btn = $("rp-send");
+      setLoading(btn, true, "Отправка…");
+      try {
+        await addDoc(collection(db, "rp_orders"), {
+          uid: auth.currentUser.uid,
+          nick: currentNick(),
+          model,
+          prompt: prompt.slice(0, 2000),
+          status: "pending",
+          createdAt: serverTimestamp(),
+          createdAtMs: Date.now()
+        });
+        $("rp-prompt").value = "";
+        status.textContent = "Заказ отправлен ✓ Админ скоро добавит режим.";
+        setTimeout(() => { if (status.textContent.startsWith("Заказ отправлен")) status.textContent = ""; }, 3000);
+      } catch (err) {
+        console.error(err);
+        status.classList.add("err");
+        status.textContent = firestoreErrorText(err);
+      } finally {
+        setLoading(btn, false);
       }
     });
 
-    /* ===== НИЖНЯЯ НАВИГАЦИЯ (визуально) ===== */
-    document.querySelectorAll(".nav-item").forEach((item) => {
-      item.addEventListener("click", () => {
-        document.querySelectorAll(".nav-item").forEach((i) => i.classList.remove("active"));
-        item.classList.add("active");
+    // ---------- ADMIN ----------
+    function loadAdmin() {
+      if (!isAdmin()) { showView("feed"); return; }
+      $("nav-admin").classList.remove("hidden");
+
+      const status = $("admin-status");
+      const box = $("admin-orders");
+      const modelsList = $("models-list");
+      status.textContent = "Загрузка заказов…";
+      box.innerHTML = "";
+
+      if (unsubOrders) unsubOrders();
+      unsubOrders = onSnapshot(collection(db, "rp_orders"), (snap) => {
+        box.innerHTML = "";
+        const arr = [];
+        snap.forEach(d => arr.push({ id: d.id, data: d.data() }));
+        arr.sort((a, b) => (b.data.createdAtMs || 0) - (a.data.createdAtMs || 0));
+        if (!arr.length) { status.textContent = "Заказов пока нет"; return; }
+        status.textContent = "";
+        arr.forEach(({ id, data }) => {
+          const card = document.createElement("div");
+          card.className = "order-card";
+
+          const head = document.createElement("div");
+          head.className = "order-head";
+          const nick = document.createElement("div");
+          nick.className = "order-nick";
+          nick.textContent = "@" + (data.nick || "user");
+          const bm = document.createElement("span");
+          bm.className = "badge model";
+          bm.textContent = "model " + (data.model || "?");
+          const bs = document.createElement("span");
+          bs.className = "badge " + (data.status === "added" ? "added" : "pending");
+          bs.textContent = data.status === "added" ? "добавлено" : "в ожидании";
+          head.append(nick, bm, bs);
+
+          const prompt = document.createElement("div");
+          prompt.className = "order-prompt";
+          prompt.textContent = data.prompt || "";
+
+          const actions = document.createElement("div");
+          actions.className = "order-actions";
+
+          if (data.status !== "added") {
+            const addBtn = document.createElement("button");
+            addBtn.className = "btn-small ok";
+            addBtn.textContent = "Добавить на сервер";
+            addBtn.addEventListener("click", async () => {
+              addBtn.disabled = true;
+              try {
+                await updateDoc(doc(db, "rp_orders", id), { status: "added" });
+              } catch (e) { addBtn.disabled = false; alert(firestoreErrorText(e)); }
+            });
+            actions.appendChild(addBtn);
+          }
+
+          const delBtn = document.createElement("button");
+          delBtn.className = "btn-small danger";
+          delBtn.textContent = "Удалить";
+          delBtn.addEventListener("click", async () => {
+            if (!confirm("Удалить заказ?")) return;
+            try { await deleteDoc(doc(db, "rp_orders", id)); }
+            catch (e) { alert(firestoreErrorText(e)); }
+          });
+          actions.appendChild(delBtn);
+
+          card.append(head, prompt, actions);
+          box.appendChild(card);
+        });
+      }, (err) => {
+        status.classList.add("err");
+        status.textContent = firestoreErrorText(err);
       });
+
+      // Models list
+      if (unsubModels) { /* keep RP subscription */ }
+      onSnapshot(collection(db, "rp_models"), (snap) => {
+        modelsList.innerHTML = "";
+        if (snap.empty) {
+          const e = document.createElement("div");
+          e.className = "feed-status";
+          e.textContent = "Пользовательских моделей нет (используются стандартные 0.1–7.9)";
+          modelsList.appendChild(e);
+          return;
+        }
+        snap.forEach(d => {
+          const m = d.data();
+          const row = document.createElement("div");
+          row.className = "order-card";
+          const head = document.createElement("div");
+          head.className = "order-head";
+          const label = document.createElement("div");
+          label.className = "order-nick";
+          label.textContent = (m.label || "?") + " (" + (m.value || "?") + ")";
+          const del = document.createElement("button");
+          del.className = "btn-small danger";
+          del.textContent = "Удалить";
+          del.style.marginLeft = "auto";
+          del.addEventListener("click", async () => {
+            if (!confirm("Удалить модель?")) return;
+            try { await deleteDoc(doc(db, "rp_models", d.id)); }
+            catch (e) { alert(firestoreErrorText(e)); }
+          });
+          head.append(label, del);
+          row.appendChild(head);
+          modelsList.appendChild(row);
+        });
+      });
+    }
+
+    $("add-model-btn").addEventListener("click", async () => {
+      const val = $("new-model-value").value.trim();
+      const lbl = $("new-model-label").value.trim();
+      const st = $("add-model-status");
+      st.classList.remove("err");
+      if (!val || !lbl) { st.textContent = "Укажите значение и название"; return; }
+      if (isNaN(parseFloat(val))) { st.textContent = "Значение должно быть числом (например 8.1)"; return; }
+      const btn = $("add-model-btn");
+      setLoading(btn, true, "Добавление…");
+      try {
+        await addDoc(collection(db, "rp_models"), {
+          value: val,
+          label: lbl,
+          addedBy: currentNick(),
+          createdAt: serverTimestamp(),
+          createdAtMs: Date.now()
+        });
+        $("new-model-value").value = "";
+        $("new-model-label").value = "";
+        st.textContent = "Модель добавлена на сервер ✓";
+        setTimeout(() => { st.textContent = ""; }, 2500);
+      } catch (err) {
+        st.classList.add("err");
+        st.textContent = firestoreErrorText(err);
+      } finally {
+        setLoading(btn, false);
+      }
+    });
+
+    // ---------- AUTH STATE ----------
+    onAuthStateChanged(auth, (user) => {
+      if (unsubFeed) { unsubFeed(); unsubFeed = null; }
+      if (unsubChats) { unsubChats(); unsubChats = null; }
+      if (unsubMessages) { unsubMessages(); unsubMessages = null; }
+      if (unsubOrders) { unsubOrders(); unsubOrders = null; }
+      currentChat = null;
+
+      if (user) {
+        const nick = user.displayName || (user.email || "").split("@")[0];
+        $("mini-nick").textContent = "@" + nick;
+        $("mini-avatar").textContent = nick.charAt(0);
+
+        $("auth-screen").classList.add("hidden");
+        $("app-screen").classList.remove("hidden");
+        $("logout-btn").classList.remove("hidden");
+        $("nav-bar").classList.remove("hidden");
+        $("nav-admin").classList.toggle("hidden", nick !== ADMIN_NICK);
+
+        ensureUserDoc(user);
+        showView("feed");
+        loadFeed();
+      } else {
+        $("app-screen").classList.add("hidden");
+        $("auth-screen").classList.remove("hidden");
+        $("logout-btn").classList.add("hidden");
+        $("nav-bar").classList.add("hidden");
+        $("nav-admin").classList.add("hidden");
+        $("posts-feed").innerHTML = "";
+        $("feed-status").textContent = "";
+        $("login-form").reset();
+        $("register-form").reset();
+        $("auth-error").textContent = "";
+      }
     });
   </script>
 </body>
