@@ -1,240 +1,406 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ограбление Века (Финал)</title>
-<style>
-  body { background: #050505; color: #fff; font-family: sans-serif; display: flex; justify-content: center; padding: 20px; margin: 0; }
-  .card { background: #111; border: 1px solid #f00; border-radius: 20px; padding: 20px; width: 100%; max-width: 600px; box-shadow: 0 0 30px rgba(255,0,0,0.2); text-align: center; }
-  h2 { color: #f00; font-size: 22px; margin-top: 0; text-transform: uppercase; }
-  button { width: 100%; padding: 16px; border-radius: 8px; font-size: 18px; background: linear-gradient(90deg, #f00, #ff8800); color: #fff; border: none; font-weight: bold; cursor: pointer; margin-bottom: 10px; }
-  button:disabled { opacity: 0.5; }
-  #status { font-size: 15px; color: #0ff; font-weight: bold; margin-bottom: 15px; min-height: 20px; }
-  video { width: 100%; border-radius: 10px; display: none; margin-top: 15px; border: 2px solid #0f0; }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Комета — Ультра Мессенджер</title>
+    <style>
+        :root {
+            --bg: #0f172a; --panel: rgba(30, 41, 59, 0.7);
+            --text: #f8fafc; --text-muted: #94a3b8;
+            --accent: #3b82f6; --accent-hover: #2563eb;
+            --msg-out: #3b82f6; --msg-in: #1e293b;
+            --border: rgba(255, 255, 255, 0.1); --input-bg: rgba(0,0,0,0.2);
+        }
+        [data-theme="light"] {
+            --bg: #f1f5f9; --panel: rgba(255, 255, 255, 0.7);
+            --text: #0f172a; --text-muted: #64748b;
+            --msg-in: #e2e8f0; --border: rgba(0,0,0,0.1); --input-bg: rgba(255,255,255,0.5);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+        body { background: var(--bg); color: var(--text); height: 100vh; display: flex; overflow: hidden; transition: 0.3s; }
+        *:focus { outline: 3px solid var(--accent); outline-offset: 2px; border-radius: 8px; }
+
+        .bg-blobs { position: fixed; inset: 0; z-index: -1; overflow: hidden; }
+        .blob { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.5; animation: float 10s infinite alternate; }
+        .blob-1 { width: 400px; height: 400px; background: #3b82f6; top: -100px; left: -100px; }
+        .blob-2 { width: 300px; height: 300px; background: #8b5cf6; bottom: -50px; right: -50px; animation-delay: -5s; }
+        @keyframes float { 100% { transform: translate(50px, 50px); } }
+
+        .auth-screen { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; z-index: 100; backdrop-filter: blur(10px); }
+        .auth-box { background: var(--panel); border: 1px solid var(--border); padding: 40px; border-radius: 24px; width: 400px; max-width: 90%; text-align: center; backdrop-filter: blur(20px); box-shadow: 0 20px 50px rgba(0,0,0,0.3); }
+        .auth-tabs { display: flex; margin-bottom: 20px; border-bottom: 1px solid var(--border); }
+        .auth-tab { flex: 1; padding: 10px; cursor: pointer; color: var(--text-muted); font-weight: bold; }
+        .auth-tab.active { color: var(--accent); border-bottom: 2px solid var(--accent); }
+        .auth-input { width: 100%; padding: 14px; background: var(--input-bg); border: 1px solid var(--border); border-radius: 12px; color: var(--text); margin-bottom: 12px; outline: none; font-size: 16px; }
+        .auth-btn { width: 100%; padding: 14px; background: var(--accent); border: none; border-radius: 12px; color: #fff; font-weight: bold; font-size: 16px; cursor: pointer; transition: 0.2s; }
+        .auth-btn:hover { background: var(--accent-hover); transform: translateY(-2px); }
+
+        .app { display: none; width: 100%; height: 100%; z-index: 10; }
+        .app.active { display: flex; }
+        
+        .sidebar { width: 340px; background: var(--panel); backdrop-filter: blur(20px); border-right: 1px solid var(--border); display: flex; flex-direction: column; transition: 0.3s; }
+        .header { padding: 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); }
+        .avatar { width: 42px; height: 42px; border-radius: 50%; background: var(--accent); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: bold; cursor: pointer; }
+        .search-area { padding: 12px; display: flex; gap: 8px; }
+        .search-input { flex: 1; padding: 12px; background: var(--input-bg); border: 1px solid var(--border); border-radius: 20px; color: var(--text); outline: none; }
+        
+        .chat-list { flex: 1; overflow-y: auto; padding: 0 12px; }
+        .chat-item { display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 14px; cursor: pointer; transition: 0.2s; margin-bottom: 5px; }
+        .chat-item:hover, .chat-item.active { background: rgba(255,255,255,0.1); }
+        [data-theme="light"] .chat-item:hover, [data-theme="light"] .chat-item.active { background: rgba(0,0,0,0.05); }
+
+        .main { flex: 1; display: flex; flex-direction: column; position: relative; }
+        .chat-header { padding: 16px 24px; background: var(--panel); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+        .chat-title { font-weight: bold; font-size: 18px; }
+        .call-controls-top { display: flex; gap: 10px; }
+        .btn-icon { padding: 8px 16px; background: var(--input-bg); border: 1px solid var(--border); border-radius: 10px; color: var(--text); cursor: pointer; transition: 0.2s; }
+        .btn-icon:hover { background: var(--accent); color: #fff; }
+
+        .messages { flex: 1; overflow-y: auto; padding: 24px; display: flex; flex-direction: column; gap: 15px; }
+        .msg { max-width: 70%; display: flex; flex-direction: column; animation: slideUp 0.3s ease; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .msg.out { align-self: flex-end; }
+        .msg-bubble { padding: 12px 18px; border-radius: 18px; background: var(--msg-in); font-size: 15px; line-height: 1.4; }
+        .msg.out .msg-bubble { background: var(--msg-out); color: #fff; border-bottom-right-radius: 4px; }
+        .msg.in .msg-bubble { border-bottom-left-radius: 4px; }
+
+        .input-area { padding: 16px 24px; background: var(--panel); border-top: 1px solid var(--border); display: flex; gap: 10px; }
+        .input-field { flex: 1; padding: 12px 20px; background: var(--input-bg); border: 1px solid var(--border); border-radius: 20px; color: var(--text); outline: none; font-size: 15px; }
+        .send-btn { padding: 0 24px; background: var(--accent); border: none; border-radius: 20px; color: #fff; font-weight: bold; cursor: pointer; }
+
+        .call-screen { position: fixed; inset: 0; background: #000; z-index: 1000; display: none; flex-direction: column; }
+        .call-screen.active { display: flex; }
+        .call-video-container { flex: 1; position: relative; display: flex; align-items: center; justify-content: center; }
+        #remoteVideo { width: 100%; height: 100%; object-fit: cover; }
+        #localVideo { position: absolute; bottom: 20px; right: 20px; width: 180px; height: 120px; border-radius: 12px; object-fit: cover; border: 2px solid var(--accent); z-index: 10; }
+        .call-stats { position: absolute; top: 20px; left: 20px; background: rgba(0,0,0,0.6); padding: 10px 20px; border-radius: 12px; font-family: monospace; font-size: 16px; color: #0f0; z-index: 10; }
+        .call-controls { padding: 30px; display: flex; justify-content: center; gap: 20px; background: rgba(0,0,0,0.8); }
+        .end-call { width: 64px; height: 64px; border-radius: 50%; background: #ef4444; color: #fff; border: none; cursor: pointer; font-size: 24px; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
+        .end-call:hover { transform: scale(1.1); }
+    </style>
 </head>
 <body>
-<div class="card">
-  <h2>🎬 Ограбление Века</h2>
-  <p style="color:#aaa; font-size:14px; margin-bottom: 15px;">
-    Жми кнопку. Когда спросит микрофон — выбери CABLE Output.
-  </p>
-  <button id="btn">▶ Создать видео</button>
-  <div id="status">Готов к запуску</div>
-  <video id="vid" controls playsinline></video>
-</div>
+    <div class="bg-blobs">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+    </div>
 
-<script>
-const W=1280, H=720, FPS=30; 
-const DUR=60; 
-const cv=document.createElement('canvas'), cx=cv.getContext('2d');
-cv.width=W; cv.height=H;
-const btn=document.getElementById('btn'), st=document.getElementById('status'), vid=document.getElementById('vid');
+    <!-- АВТОРИЗАЦИЯ -->
+    <div class="auth-screen" id="authScreen">
+        <div class="auth-box">
+            <h2 style="margin-bottom: 20px;">Комета ☄️</h2>
+            <div class="auth-tabs">
+                <div class="auth-tab active" id="tabLogin" onclick="switchAuth('login')">Вход</div>
+                <div class="auth-tab" id="tabReg" onclick="switchAuth('reg')">Регистрация</div>
+            </div>
+            
+            <div id="formLogin">
+                <input type="email" id="loginEmail" class="auth-input" placeholder="Email">
+                <input type="password" id="loginPass" class="auth-input" placeholder="Пароль">
+                <button class="auth-btn" onclick="doLogin()">Войти</button>
+            </div>
 
-let voices = [];
-const script = [
-  { role: "Рассказчик", text: "Полночь. Банк. Трое друзей готовы на всё.", scene: "bank" },
-  { role: "Босс", text: "Так, мы на месте. Новичок, ты взял мешок?", scene: "bank" },
-  { role: "Новичок", text: "Э-э... Я думал, ты возьмешь!", scene: "bank" },
-  { role: "Босс", text: "Ты издеваешься?!", scene: "bank" },
-  { role: "Рассказчик", text: "Тут в банк зашел случайный прохожий.", scene: "bank" },
-  { role: "Прохожий", text: "О, привет! Это флешмоб? Я тоже хочу!", scene: "bank" },
-  { role: "Босс", text: "Какой флешмоб?! Мы грабим банк! Ложись!", scene: "bank" },
-  { role: "Рассказчик", text: "Новичок испугался, выронил пистолет и раздался выстрел!", scene: "shot" },
-  { role: "Новичок", text: "Ой! Оно само!", scene: "shot" },
-  { role: "Рассказчик", text: "Приехала полиция. Грабители бросились бежать!", scene: "escape" },
-  { role: "Босс", text: "Нас сдали! Уходим!", scene: "escape" },
-  { role: "Рассказчик", text: "Их поймали через пять минут. Продолжение следует...", scene: "outside" }
-];
+            <div id="formReg" style="display: none;">
+                <input type="text" id="regNick" class="auth-input" placeholder="Ваш никнейм (уникальный)">
+                <input type="email" id="regEmail" class="auth-input" placeholder="Email">
+                <input type="password" id="regPass" class="auth-input" placeholder="Пароль (мин. 6 символов)">
+                <button class="auth-btn" onclick="doRegister()">Создать аккаунт</button>
+            </div>
+        </div>
+    </div>
 
-// ФИКС ГОЛОСОВ: Если голосов меньше 4, берем первый попавшийся
-function loadVoices() {
-  const all = speechSynthesis.getVoices();
-  const ru = all.filter(v => v.lang.includes('ru'));
-  const pool = ru.length > 0 ? ru : all;
-  
-  const v1 = pool[0] || null;
-  const v2 = pool[1] || pool[0] || null;
-  const v3 = pool[2] || pool[1] || pool[0] || null;
-  const v4 = pool[3] || pool[2] || pool[1] || pool[0] || null;
+    <!-- ПРИЛОЖЕНИЕ -->
+    <div class="app" id="app">
+        <aside class="sidebar">
+            <div class="header">
+                <div style="font-weight: bold; font-size: 20px;">Комета</div>
+                <div class="avatar" id="myAvatar">Г</div>
+            </div>
+            <div class="search-area">
+                <input type="text" id="searchInput" class="search-input" placeholder="Поиск людей..." oninput="renderSidebar()">
+            </div>
+            <div class="chat-list" id="chatList"></div>
+        </aside>
 
-  voices = {
-    "Рассказчик": v1,
-    "Босс": v2,
-    "Новичок": v3,
-    "Прохожий": v4
-  };
-}
-speechSynthesis.onvoiceschanged = loadVoices;
-loadVoices();
+        <main class="main">
+            <div class="chat-header">
+                <div class="chat-title" id="chatTitle">Выберите чат</div>
+                <div class="call-controls-top" id="callButtons" style="display: none;">
+                    <button class="btn-icon" onclick="startCall(false)">📞 Аудио</button>
+                    <button class="btn-icon" onclick="startCall(true)">📹 Видео</button>
+                </div>
+            </div>
+            
+            <div class="messages" id="messages"></div>
+            
+            <div class="input-area" id="inputArea" style="display: none;">
+                <input type="text" id="msgInput" class="input-field" placeholder="Написать сообщение...">
+                <button class="send-btn" onclick="sendMsg()">➤</button>
+            </div>
+        </main>
+    </div>
 
-let currentScene = "bank";
-let flashEffect = 0;
-let currentLine = null;
+    <!-- ЭКРАН ЗВОНКА -->
+    <div class="call-screen" id="callScreen">
+        <div class="call-video-container">
+            <video id="remoteVideo" autoplay playsinline></video>
+            <video id="localVideo" autoplay playsinline muted></video>
+            <div class="call-stats" id="callStats">Ping: -- ms</div>
+        </div>
+        <div class="call-controls">
+            <button class="end-call" onclick="endCall()">✕</button>
+        </div>
+    </div>
 
-function drawCharacter(x, y, color, phase, isRunning) {
-  cx.save(); cx.translate(x, y);
-  cx.strokeStyle = color; cx.fillStyle = color; cx.lineWidth = 6; cx.lineCap = 'round';
-  cx.beginPath(); cx.arc(0, -50, 14, 0, Math.PI*2); cx.fill();
-  cx.beginPath(); cx.moveTo(0, -36); cx.lineTo(0, 10); cx.stroke();
-  const arm = Math.sin(phase * (isRunning ? 25 : 8)) * (isRunning ? 1.2 : 0.6);
-  cx.beginPath(); cx.moveTo(0, -25); cx.lineTo(20*Math.cos(arm), -25 + 20*Math.sin(arm)); cx.stroke();
-  cx.beginPath(); cx.moveTo(0, -25); cx.lineTo(-20*Math.cos(arm), -25 + 20*Math.sin(arm)); cx.stroke();
-  cx.beginPath(); cx.moveTo(0, 10); cx.lineTo(15*Math.sin(arm), 40); cx.stroke();
-  cx.beginPath(); cx.moveTo(0, 10); cx.lineTo(-15*Math.sin(arm), 40); cx.stroke();
-  cx.restore();
-}
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getDatabase, ref, push, onValue, set, get } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
-function drawScene(t) {
-  if (currentScene === "bank" || currentScene === "shot") {
-    const bg = cx.createLinearGradient(0, 0, 0, H);
-    bg.addColorStop(0, '#1a1a2a'); bg.addColorStop(1, '#0a0a15');
-    cx.fillStyle = bg; cx.fillRect(0, 0, W, H);
-    cx.fillStyle = '#2a2a3a'; cx.fillRect(0, H-150, W, 150);
-    const col = cx.createLinearGradient(150, 0, 230, 0);
-    col.addColorStop(0, '#b8860b'); col.addColorStop(0.5, '#ffd700'); col.addColorStop(1, '#b8860b');
-    cx.fillStyle = col; cx.fillRect(150, 100, 80, H-250); cx.fillRect(W-230, 100, 80, H-250); cx.fillRect(W/2-40, 100, 80, H-250);
-    cx.fillStyle = '#ffd700'; cx.font = 'bold 40px serif'; cx.textAlign = 'center'; cx.fillText('ЦЕНТРАЛЬНЫЙ БАНК', W/2, 80);
-    const sx = W - 350, sy = 250, sr = 150;
-    cx.fillStyle = '#222'; cx.beginPath(); cx.arc(sx, sy, sr + 10, 0, Math.PI*2); cx.fill();
-    cx.fillStyle = '#666'; cx.beginPath(); cx.arc(sx, sy, sr, 0, Math.PI*2); cx.fill();
-    cx.strokeStyle = '#111'; cx.lineWidth = 15; cx.beginPath(); cx.arc(sx, sy, 50, 0, Math.PI*2); cx.stroke();
-  } else {
-    cx.fillStyle = '#0a0a1a'; cx.fillRect(0, 0, W, H);
-    cx.fillStyle = '#151525'; cx.fillRect(W/2 - 400, 100, 800, 450);
-    cx.fillStyle = '#111'; cx.fillRect(0, H-150, W, 150);
-  }
+        // ТВОЙ КОНФИГ FIREBASE
+        const firebaseConfig = {
+            apiKey: "AIzaSyBHbm84N2Bjed93Xb2ccpWPsCTW138wf64",
+            authDomain: "kometanm.firebaseapp.com",
+            databaseURL: "https://kometanm-default-rtdb.firebaseio.com",
+            projectId: "kometanm",
+            storageBucket: "kometanm.firebasestorage.app",
+            messagingSenderId: "389756589729",
+            appId: "1:389756589729:web:bc82b216570226bbf142e0"
+        };
 
-  const isEscaping = currentScene === "escape" || currentScene === "outside";
-  const colors = ["#ff3333", "#33ff33", "#33ffff"];
-  const names = ["Босс", "Новичок", "Прохожий"];
-  for (let i = 0; i < 3; i++) {
-    let px = !isEscaping ? 350 + i * 120 : W - 200 - (t % 4) * 100 - i * 100;
-    drawCharacter(px, H - 150, colors[i], t + i*2, isEscaping);
-    cx.fillStyle = colors[i]; cx.font = 'bold 20px sans-serif'; cx.textAlign = 'center';
-    cx.fillText(names[i], px, H - 230);
-  }
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getDatabase(app);
+        const $ = id => document.getElementById(id);
 
-  if (flashEffect > 0) {
-    cx.fillStyle = `rgba(255, 255, 255, ${flashEffect})`;
-    cx.fillRect(0, 0, W, H);
-    flashEffect -= 0.1;
-  }
+        let currentUser = null;
+        let myProfile = null;
+        let currentChat = null;
+        let peer = null;
+        let localStream = null;
+        let currentCall = null;
+        let pingInterval = null;
 
-  if (currentLine) {
-    cx.fillStyle = 'rgba(0, 0, 0, 0.75)';
-    cx.fillRect(W/2 - 500, H - 130, 1000, 100);
+        // === АВТОРИЗАЦИЯ ===
+        window.switchAuth = (type) => {
+            $('tabLogin').classList.toggle('active', type === 'login');
+            $('tabReg').classList.toggle('active', type === 'reg');
+            $('formLogin').style.display = type === 'login' ? 'block' : 'none';
+            $('formReg').style.display = type === 'reg' ? 'block' : 'none';
+        };
+
+        window.doRegister = async () => {
+            const nick = $('regNick').value.trim();
+            const email = $('regEmail').value.trim();
+            const pass = $('regPass').value;
+            if(!nick || !email || !pass) return alert("Заполните все поля!");
+
+            try {
+                const cred = await createUserWithEmailAndPassword(auth, email, pass);
+                // Сохраняем профиль в базу
+                await set(ref(db, 'users/' + cred.user.uid), {
+                    uid: cred.user.uid,
+                    nickname: nick,
+                    email: email
+                });
+                alert("Аккаунт создан!");
+            } catch (err) {
+                alert("Ошибка: " + err.message);
+            }
+        };
+
+        window.doLogin = async () => {
+            const email = $('loginEmail').value.trim();
+            const pass = $('loginPass').value;
+            try {
+                await signInWithEmailAndPassword(auth, email, pass);
+            } catch (err) {
+                alert("Ошибка входа: " + err.message);
+            }
+        };
+
+        // Отслеживаем вход
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                currentUser = user;
+                const snap = await get(ref(db, 'users/' + user.uid));
+                if(snap.exists()) {
+                    myProfile = snap.val();
+                } else {
+                    myProfile = { uid: user.uid, nickname: 'User', email: user.email };
+                }
+                
+                $('authScreen').style.display = 'none';
+                $('app').classList.add('active');
+                $('myAvatar').textContent = myProfile.nickname[0].toUpperCase();
+                
+                initPeer();
+                loadUsersAndChats();
+            } else {
+                $('authScreen').style.display = 'flex';
+                $('app').classList.remove('active');
+            }
+        });
+
+        // === ЗАГРУЗКА ПОЛЬЗОВАТЕЛЕЙ И ЧАТОВ ===
+        let allUsers = {};
+        let myPrivateChats = {}; // Сохраненные переписки
+
+        function loadUsersAndChats() {
+            // Слушаем всех юзеров
+            onValue(ref(db, 'users'), (snapshot) => {
+                allUsers = snapshot.val() || {};
+                renderSidebar();
+            });
+            // Слушаем наши личные переписки
+            onValue(ref(db, 'user_chats/' + currentUser.uid), (snapshot) => {
+                myPrivateChats = snapshot.val() || {};
+                renderSidebar();
+            });
+        }
+
+        window.renderSidebar = () => {
+            const q = $('searchInput').value.toLowerCase().trim();
+            const list = $('chatList');
+            list.innerHTML = '';
+            
+            if(q === '') {
+                // Показываем сохраненные чаты
+                for(const chatId in myPrivateChats) {
+                    const otherUid = chatId.split('_').find(id => id !== currentUser.uid);
+                    const u = allUsers[otherUid];
+                    if(u) addChatItem(chatId, u.nickname, u.uid);
+                }
+            } else {
+                // Ищем людей по нику
+                for(const uid in allUsers) {
+                    if(uid === currentUser.uid) continue;
+                    const u = allUsers[uid];
+                    if(u.nickname.toLowerCase().includes(q)) {
+                        // Генерируем уникальный ID для переписки (сортируем UID, чтобы у обоих был одинаковый)
+                        const chatId = [currentUser.uid, uid].sort().join('_');
+                        addChatItem(chatId, u.nickname, u.uid);
+                    }
+                }
+            }
+        };
+
+        function addChatItem(chatId, name, targetUid) {
+            const div = document.createElement('div');
+            div.className = 'chat-item';
+            div.onclick = () => openChat(chatId, name, targetUid);
+            div.innerHTML = `<div class="avatar">${name[0].toUpperCase()}</div><div style="font-weight: 500;">${name}</div>`;
+            $('chatList').appendChild(div);
+        }
+
+        window.openChat = (chatId, name, targetUid) => {
+            currentChat = { chatId, name, targetUid };
+            $('chatTitle').textContent = name;
+            $('callButtons').style.display = 'flex';
+            $('inputArea').style.display = 'flex';
+            $('messages').innerHTML = '';
+            
+            // Сохраняем чат в список, чтобы он не пропал
+            set(ref(db, 'user_chats/' + currentUser.uid + '/' + chatId), true);
+            set(ref(db, 'user_chats/' + targetUid + '/' + chatId), true);
+            
+            // Загружаем сообщения
+            onValue(ref(db, 'messages/' + chatId), (snapshot) => {
+                $('messages').innerHTML = '';
+                const msgs = snapshot.val() || {};
+                Object.values(msgs).forEach(m => {
+                    const div = document.createElement('div');
+                    div.className = `msg ${m.uid === currentUser.uid ? 'out' : 'in'}`;
+                    div.innerHTML = `<div class="msg-bubble">${m.text}</div>`;
+                    $('messages').appendChild(div);
+                });
+                $('messages').scrollTop = $('messages').scrollHeight;
+            });
+        };
+
+        window.sendMsg = () => {
+            const text = $('msgInput').value.trim();
+            if(!text || !currentChat) return;
+            push(ref(db, 'messages/' + currentChat.chatId), { uid: currentUser.uid, text: text });
+            $('msgInput').value = '';
+        };
+
+        // === WEBRTC ЗВОНКИ ===
+        function initPeer() {
+            if(peer) peer.destroy();
+            peer = new Peer(currentUser.uid); // Используем UID для звонков
+
+            peer.on('call', (call) => {
+                if(confirm('Входящий звонок! Принять?')) {
+                    navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then((stream) => {
+                        localStream = stream;
+                        $('localVideo').srcObject = stream;
+                        call.answer(stream);
+                        handleCall(call);
+                    }).catch(err => alert("Ошибка доступа к камере: " + err));
+                } else {
+                    call.close();
+                }
+            });
+        }
+
+        window.startCall = (isVideo) => {
+            if(!currentChat) return;
+            const targetId = currentChat.targetUid; // Звоним по UID!
+            const constraints = { video: isVideo, audio: true };
+
+            navigator.mediaDevices.getUserMedia(constraints).then((stream) => {
+                localStream = stream;
+                $('localVideo').srcObject = stream;
+                $('callScreen').classList.add('active');
+                
+                const call = peer.call(targetId, stream);
+                if(!call) {
+                    alert("Собеседник не в сети.");
+                    endCall();
+                    return;
+                }
+                handleCall(call);
+                startRealPing();
+            }).catch(err => alert("Нет доступа к камере/микрофону!"));
+        };
+
+        function handleCall(call) {
+            currentCall = call;
+            $('callScreen').classList.add('active');
+            call.on('stream', (remoteStream) => {
+                $('remoteVideo').srcObject = remoteStream;
+            });
+            call.on('close', endCall);
+        }
+
+        window.endCall = () => {
+            if(currentCall) currentCall.close();
+            if(localStream) localStream.getTracks().forEach(t => t.stop());
+            $('callScreen').classList.remove('active');
+            clearInterval(pingInterval);
+            $('remoteVideo').srcObject = null;
+            $('localVideo').srcObject = null;
+        };
+
+        function startRealPing() {
+            clearInterval(pingInterval);
+            const statsEl = $('callStats');
+            pingInterval = setInterval(async () => {
+                const start = Date.now();
+                try {
+                    await fetch('https://1.1.1.1/cdn-cgi/trace', { mode: 'no-cors' });
+                    const ping = Date.now() - start;
+                    statsEl.innerHTML = `Ping: ${ping} ms<br>Связь: ${ping < 100 ? 'Отличная' : 'Средняя'}`;
+                } catch (e) {
+                    statsEl.innerHTML = `Ping: >500 ms<br>Связь: Плохая`;
+                }
+            }, 2000);
+        }
+    </script>
     
-    cx.textAlign = 'center';
-    cx.font = 'bold 28px "Segoe UI", sans-serif';
-    
-    let roleColor = "#ffffff";
-    if (currentLine.role === "Рассказчик") roleColor = "#aaaaaa";
-    if (currentLine.role === "Босс") roleColor = "#ff5555";
-    if (currentLine.role === "Новичок") roleColor = "#55ff55";
-    if (currentLine.role === "Прохожий") roleColor = "#55ffff";
-    
-    cx.fillStyle = roleColor;
-    cx.fillText(currentLine.role, W/2, H - 95);
-    
-    cx.font = '26px "Segoe UI", sans-serif';
-    cx.fillStyle = '#ffffff';
-    cx.fillText(currentLine.text, W/2, H - 55);
-  }
-}
-
-btn.onclick = async () => {
-  btn.disabled = true; vid.style.display='none';
-  st.textContent = '🎬 Запись...';
-
-  const stream = cv.captureStream(FPS);
-  
-  try {
-    const micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    stream.addTrack(micStream.getAudioTracks()[0]);
-  } catch (e) {
-    console.log("Микрофон не подключен, запись без голоса.");
-  }
-
-  const rec = new MediaRecorder(stream, { mimeType: 'video/webm;codecs=vp9,opus' });
-  const chunks = []; rec.ondataavailable = e => chunks.push(e.data);
-  const done = new Promise(r => rec.onstop = r);
-  rec.start();
-
-  let scriptIndex = 0;
-  const startRealTime = performance.now();
-  speechSynthesis.cancel();
-
-  function playNextLine() {
-    if (scriptIndex >= script.length) return;
-    const item = script[scriptIndex];
-    
-    if (item.scene) currentScene = item.scene;
-    if (item.scene === "shot") flashEffect = 1.0;
-    
-    currentLine = item;
-
-    const utter = new SpeechSynthesisUtterance(item.text);
-    if (voices[item.role]) utter.voice = voices[item.role];
-    
-    utter.volume = 1.0; // МАКСИМАЛЬНАЯ ГРОМКОСТЬ
-    
-    // ИСПРАВЛЕННЫЕ ГОЛОСА (Без пропусков и писка)
-    if (item.role === "Босс") { 
-      utter.pitch = 0.7; utter.rate = 0.9; 
-    } else if (item.role === "Новичок") { 
-      utter.pitch = 1.0; utter.rate = 1.1; // Обычный голос
-    } else if (item.role === "Прохожий") { 
-      utter.pitch = 1.2; utter.rate = 1.0; 
-    } else { 
-      utter.pitch = 0.9; utter.rate = 0.95; 
-    }
-
-    utter.onend = () => {
-      setTimeout(() => {
-        currentLine = null; 
-        setTimeout(playNextLine, 500);
-      }, 800); 
-    };
-
-    utter.onerror = (e) => {
-      console.error("Ошибка озвучки:", e);
-      // Если голос сломался, идем дальше, чтобы не зависало
-      currentLine = null; 
-      scriptIndex++;
-      setTimeout(playNextLine, 500);
-    };
-
-    speechSynthesis.speak(utter);
-    scriptIndex++;
-  }
-  
-  setTimeout(playNextLine, 500);
-
-  function tick(now) {
-    const t = (now - startRealTime) / 1000;
-    if (t >= DUR) {
-      st.textContent = '💾 Сохранение...';
-      setTimeout(() => rec.stop(), 500);
-      return;
-    }
-    drawScene(t);
-    st.textContent = `🔴 ЗАПИСЬ: ${Math.floor(t)} / 60 сек`;
-    requestAnimationFrame(tick);
-  }
-  requestAnimationFrame(tick);
-
-  await done;
-  speechSynthesis.cancel();
-
-  const url = URL.createObjectURL(new Blob(chunks, {type: 'video/webm'}));
-  const a = document.createElement('a'); a.href=url; a.download=`heist_final.webm`; a.click();
-  
-  vid.src=url; vid.style.display='block'; vid.play();
-  st.textContent = `✅ Готово!`; 
-  btn.disabled = false;
-};
-</script>
+    <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
 </body>
 </html>
